@@ -1,0 +1,8 @@
+/venv
+.env
+**/__pycache__
+/.vscode
+/.pytest_cache
+stop_search_dev_db.db
+/DEBUG
+stopSearch.egg-info
