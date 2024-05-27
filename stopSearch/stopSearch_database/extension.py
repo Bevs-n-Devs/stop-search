@@ -33,7 +33,9 @@ def init_db():
     Base.metadata.create_all(bind=engine)
 
     # Create default questions if it doesn't exist
+    
     from stopSearch.stopSearch_database.models import (
+        QuestionReportQuestions,
         QuestionReportType,
         QuestionLocationType,
         QuestionVictimsInvolved,
@@ -47,6 +49,29 @@ def init_db():
 
     session = db_session()
 
+    if not session.query(QuestionReportQuestions).first():
+        default_data = [
+            QuestionReportQuestions(report_question='Please enter your email to start the report:'),
+            QuestionReportQuestions(report_question='Please re-enter your email to complete the report:'),
+            QuestionReportQuestions(report_question='Are you a witness or a victim?'),
+            QuestionReportQuestions(report_question='Enter the date of the incident:'),
+            QuestionReportQuestions(report_question='Where did this incident happen?'),
+            QuestionReportQuestions(report_question='How many victim were involved in the incident?'),
+            QuestionReportQuestions(report_question='Approximately how many police could you see?'),
+            QuestionReportQuestions(report_question='What was the reason for the stop?'),
+            QuestionReportQuestions(report_question='Was the search moderate or aggressive?'),
+            QuestionReportQuestions(report_question='Did you get the police officer\'s name, badge number etc?'),
+            QuestionReportQuestions(report_question='Enter the police officer\'s information where possible:'),
+            QuestionReportQuestions(report_question='How old was the person or people involved?'),
+            QuestionReportQuestions(report_question='What was the gender of the person or people involved?'),
+            QuestionReportQuestions(report_question='What is the race of the person or people involved?'),
+            QuestionReportQuestions(report_question='Please add any additional notes here:'),
+            QuestionReportQuestions(report_question='Please upload any media you have here:'),
+        ]
+        session.add_all(default_data)
+        session.commit()
+        session.close()
+    
     if not session.query(QuestionReportType).first():
         default_data = [
             QuestionReportType(report_type='witness'),
