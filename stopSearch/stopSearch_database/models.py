@@ -3,6 +3,11 @@ from sqlalchemy.orm import relationship
 from stopSearch.stopSearch_database.extension import Base
 
 # questions
+class QuestionReportQuestions(Base):
+    __tablename__ = 'question_report_questions'
+    question_id = Column(Integer, primary_key=True)
+    report_question = Column(String(500))
+
 class QuestionReportType(Base):
     __tablename__ = 'question_report_type'
     question_report_type_id = Column(Integer, primary_key=True)
@@ -24,7 +29,7 @@ class QuestionNumberOfPolice(Base):
     number_of_police = Column(String(8))
 
 class QuestionSearchReason(Base):
-    __tablename__ = 'question_serarch_type'
+    __tablename__ = 'question_search_reason'
     question_serarch_type_id = Column(Integer, primary_key=True)
     search_reason = Column(String(85))
 
