@@ -6,52 +6,52 @@ from stopSearch.stopSearch_database.extension import Base
 class QuestionReportQuestions(Base):
     __tablename__ = 'question_report_questions'
     question_id = Column(Integer, primary_key=True)
-    report_question = Column(String(500))
+    question_name = Column(String(500))
 
 class QuestionReportType(Base):
     __tablename__ = 'question_report_type'
     question_report_type_id = Column(Integer, primary_key=True)
-    report_type = Column(String(8)) # witness / victim 
+    report_type_options = Column(String(8)) # witness / victim 
 
 class QuestionLocationType(Base):
     __tablename__ = 'question_location_type'
     question_location_type_id = Column(Integer, primary_key=True)
-    location_type = Column(String(20)) # automatic address / manual address
+    location_type_options = Column(String(20)) # automatic address / manual address
 
 class QuestionVictimsInvolved(Base):
     __tablename__ = 'question_victims_involved'
     question_victims_involved_id = Column(Integer, primary_key=True)
-    victims_involved = Column(String(8))
+    victims_involved_options = Column(String(8))
 
 class QuestionNumberOfPolice(Base):
     __tablename__ = 'question_number_of_police'
     question_number_of_police_id = Column(Integer, primary_key=True)
-    number_of_police = Column(String(8))
+    number_of_police_options = Column(String(8))
 
 class QuestionSearchReason(Base):
     __tablename__ = 'question_search_reason'
     question_serarch_type_id = Column(Integer, primary_key=True)
-    search_reason = Column(String(85))
+    search_reason_options = Column(String(85))
 
 class QuestionSearchType(Base):
     __tablename__ = 'question_search_type'
     question_search_type_id = Column(Integer, primary_key=True)
-    search_type = Column(String(10)) # moderate / aggressive
+    search_type_options = Column(String(10)) # moderate / aggressive
 
 class QuestionVictimAge(Base):
     __tablename__ = 'question_victim_age'
     question_victim_age_id = Column(Integer, primary_key=True)
-    victim_age = Column(String(8))
+    victim_age_options = Column(String(8))
 
 class QuestionVictimGender(Base):
     __tablename__ = 'question_victim_gender'
     question_victim_gender_id = Column(Integer, primary_key=True)
-    victim_gender = Column(String(30))
+    victim_gender_options = Column(String(30))
 
 class QuestionVictimRace(Base):
     __tablename__ = 'question_victim_race'
     question_victim_race_id = Column(Integer, primary_key=True)
-    victim_race = Column(String(30))
+    victim_race_options = Column(String(30))
 
 # answers
 class ReportData(Base):
