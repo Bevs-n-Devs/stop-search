@@ -30,7 +30,7 @@ class QuestionNumberOfPolice(Base):
 
 class QuestionSearchReason(Base):
     __tablename__ = 'question_search_reason'
-    question_serarch_type_id = Column(Integer, primary_key=True)
+    question_search_reason_id = Column(Integer, primary_key=True)
     search_reason_options = Column(String(85))
 
 class QuestionSearchType(Base):
