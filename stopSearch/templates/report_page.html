@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock %}
+
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('report_endpoint') }}" method="post">
+
+    <h1>Stop Search UK Report</h1>
+
+    <div class="form-group">
+
+        <p id="question1">{{ question_1 }} <input type="email" name="report_email" id="reportEmail" placeholder="Type your email here..." required></p>
+        <p id="question2">{{ question_2 }} <input type="email" name="confirm_report_email" id="confirmReportEmail" placeholder="Re-type your email here..." required></p>
+        <p id="question3">
+            {{ question_3 }}
+            <b><label for="witness">{{ question_3_option_1 }}</label></b>
+            <input type="radio" name="form_type" id="witness" required>
+            <b><label for="victim">{{ question_3_option_2 }}</label></b>
+            <input type="radio" name="form_type" id="victim" required>
+        </p>
+        <p id="question4">
+            {{ question_4}}
+            <input type="datetime-local" name="form_date" id="formDate" required>
+        </p>
+        <p id="question5">
+            {{ question_5 }}
+            <b><label for="automaticAddress">{{ question_5_option_1 }}</label></b>
+            <input type="radio" name="address_type" id="automaticAddress" required>
+            <b><label for="manualAddress">{{ question_5_option_2 }}</label></b>
+            <input type="radio" name="address_type" id="manualAddress" required>
+            <div id="userIncidentAddress">
+                <label for="streetName">Street Name:</label>
+                <input type="text" name="street_name" id="streetName" placeholder="door number, street name">
+                <br>
+                <label for="townOrCity">Town or City:</label>
+                <input type="text" name="town_or_city" id="townOrCity" placeholder="town or city, (postcode optional)">
+            </div>
+        </p>
+        <p id="question6">
+            {{  question_6 }}
+            <select name="victims_involved" id="victimsInvolved" required>
+                <option value="">Please Select</option>
+                <option value="{{ question_6_option_1 }}">{{ question_6_option_1 }}</option>
+                <option value="{{ question_6_option_2 }}">{{ question_6_option_2 }}</option>
+                <option value="{{ question_6_option_3 }}">{{ question_6_option_3 }}</option>
+                <option value="{{ question_6_option_4 }}">{{ question_6_option_4 }}</option>
+                <option value="{{ question_6_option_5 }}">{{ question_6_option_5 }}</option>
+                <option value="{{ question_6_option_6 }}">{{ question_6_option_6 }}</option>
+                <option value="{{ question_6_option_7 }}">{{ question_6_option_7 }}</option>
+                <option value="{{ question_6_option_8 }}">{{ question_6_option_8 }}</option>
+                <option value="{{ question_6_option_9 }}">{{ question_6_option_9 }}</option>
+                <option value="{{ question_6_option_10 }}">{{ question_6_option_10 }}</option>
+                <option value="{{ question_6_option_11 }}">{{ question_6_option_11 }}</option>
+                <option value="{{ question_6_option_12 }}">{{ question_6_option_12 }}</option>
+            </select>
+        </p>
+        <p id="question12">
+            {{ question_12 }}
+            <select name="victim_age" id="victimAge" required>
+                <option value="">Please Select</option>
+                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }} </option>
+                <option value="{{ question_12_option_2 }}">{{ question_12_option_2 }}</option>
+                <option value="{{ question_12_option_3 }}">{{ question_12_option_3 }}</option>
+                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }}</option>
+                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }}</option>
+                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }}</option>
+                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }}</option>
+                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }}</option>
+                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }}</option>
+            </select>
+        </p>
+        <p id="question13">
+          {{ question_13 }} 
+          <select name="victim_gender" id="victimGender" required>
+            <option value="">Please Select</option>
+            <option value="{{ question_13_option_1 }}">{{ question_13_option_1 }}</option>
+            <option value="{{ question_13_option_2 }}">{{ question_13_option_2 }}</option>
+            <option value="{{ question_13_option_3 }}">{{ question_13_option_3 }}</option>
+            <option value="{{ question_13_option_4 }}">{{ question_13_option_4 }}</option>
+            <option value="{{ question_13_option_5 }}">{{ question_13_option_5 }}</option>
+            <option value="{{ question_13_option_6 }}">{{ question_13_option_6 }}</option>
+            <option value="{{ question_13_option_7 }}">{{ question_13_option_7 }}</option>
+            <option value="{{ question_13_option_8 }}">{{ question_13_option_8 }}</option>
+            <option value="{{ question_13_option_9 }}">{{ question_13_option_9 }}</option>
+          </select>
+        </p>
+        <p id="question14">
+            {{ question_14 }}
+            <select name="victim_race" id="victimRace" required>
+                <option value="">Please Select</option>
+                <option value="{{ question_14_option_1 }}">{{ question_14_option_1 }}</option>
+                <option value="{{ question_14_option_2 }}">{{ question_14_option_2 }}</option>
+                <option value="{{ question_14_option_3 }}">{{ question_14_option_3 }}</option>
+                <option value="{{ question_14_option_4 }}">{{ question_14_option_4 }}</option>
+                <option value="{{ question_14_option_5 }}">{{ question_14_option_5 }}</option>
+                <option value="{{ question_14_option_6 }}">{{ question_14_option_6 }}</option>
+                <option value="{{ question_14_option_7 }}">{{ question_14_option_7 }}</option>
+                <option value="{{ question_14_option_8 }}">{{ question_14_option_8 }}</option>
+                <option value="{{ question_14_option_9 }}">{{ question_14_option_9 }}</option>
+                <option value="{{ question_14_option_10 }}">{{ question_14_option_10 }}</option>
+            </select>
+        </p>
+        <p id="question7">
+            {{ question_7 }}
+            <select name="number_of_police" id="numberOfPolice" required>
+                <option value="">Please Select</option>
+                <option value="{{ question_7_option_1 }}">{{ question_7_option_1 }}</option>
+                <option value="{{ question_7_option_2 }}">{{ question_7_option_2 }}</option>
+                <option value="{{ question_7_option_3 }}">{{ question_7_option_3 }}</option>
+                <option value="{{ question_7_option_4 }}">{{ question_7_option_4 }}</option>
+                <option value="{{ question_7_option_5 }}">{{ question_7_option_5 }}</option>
+                <option value="{{ question_7_option_6 }}">{{ question_7_option_6 }}</option>
+                <option value="{{ question_7_option_7 }}">{{ question_7_option_7 }}</option>
+                <option value="{{ question_7_option_8 }}">{{ question_7_option_8 }}</option>
+            </select>
+        </p>
+        <p id="question9">
+            {{  question_9 }}
+            <b><label for="unknown">{{ question_9_option_1 }}</label></b>
+            <input type="radio" name="searchType" id="unknown" required>
+            <b><label for="unknown">{{ question_9_option_2 }}</label></b>
+            <input type="radio" name="searchType" id="unknown" required>
+            <b><label for="aggressive">{{ question_9_option_3 }}</label></b>
+            <input type="radio" name="searchType" id="aggressive" required>
+        </p>
+        <p id="question8">
+            {{ question_8 }}
+            <select name="search_reason" id="searchReason" required>
+                <option value="">Please Select</option>
+                <option value="{{ question_8_option_1 }}">{{ question_8_option_1 }}</option>
+                <option disabled value="{{ question_8_option_2 }}">{{ question_8_option_2 }}</option>
+                <option value="{{ question_8_option_3 }}">{{ question_8_option_3 }}</option>
+                <option value="{{ question_8_option_4 }}">{{ question_8_option_4 }}</option>
+                <option value="{{ question_8_option_5 }}">{{ question_8_option_5 }}</option>
+                <option value="{{ question_8_option_6 }}">{{ question_8_option_6 }}</option>
+                <option disabled value="{{ question_8_option_7 }}">{{ question_8_option_7 }}</option>
+                <option value="{{ question_8_option_8 }}">{{ question_8_option_8 }}</option>
+                <option value="{{ question_8_option_9 }}">{{ question_8_option_9 }}</option>
+            </select>
+        </p>
+        <p id="question10">
+            {{  question_10 }}
+            <b><label for="noPoliceInfo">{{ question_10_option_2 }}</label></b>
+            <input type="radio" name="getPoliceInfo" id="noPoliceInfo" required>
+            <b><label for="obtainPoliceInfo">{{ question_10_option_1 }}</label></b>
+            <input type="radio" name="getPoliceInfo" id="obtainPoliceInfo" required>
+        </p>
+        <div id="officerContainer">
+            <p id="question11">
+                {{ question_11 }}
+                <br>
+                <input type="text" name="police_name" id="policeName" placeholder="Officer Name...">
+                <input type="text" name="police_badge" id="policeName" placeholder="Officer Badge Number...">
+                <input type="text" name="police_station" id="policeName" placeholder="Police Station...">
+                <button type="button" name="add_new_officer" id="addOfficerButton">Add new Officer</button>
+            </p>
+        </div>
+        <p id="question15">
+            {{ question_15 }}
+            <br>
+            <textarea name="additional_notes" id="additionalNotes" cols="100" rows="10"></textarea>
+        </p>
+        <p id="question16">
+            {{ question_16 }}
+        </p>
+
+        <button type="submit">Submit Form</button>
+        
+    </div>
+    
+</form>
+{% endblock %}
+
+
+
+{% block script %}
+<script>
+// This script runs when the document is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Get references to the relevant elements
+    var userIncidentAddress = document.getElementById('userIncidentAddress');
+    var automaticAddress = document.getElementById('automaticAddress');
+    var manualAddress = document.getElementById('manualAddress');
+    
+    // Hide the street name and town/city inputs initially
+    userIncidentAddress.style.display = 'none';
+    
+    // Add event listeners to the radio buttons
+    automaticAddress.addEventListener('change', function() {
+        if (automaticAddress.checked) {
+            userIncidentAddress.style.display = 'none';
+        }
+    });
+    
+    manualAddress.addEventListener('change', function() {
+        if (manualAddress.checked) {
+            userIncidentAddress.style.display = 'block';
+        }
+    });
+});
+
+// function to hide police info if clicked 'no'
+document.addEventListener('DOMContentLoaded', function() {
+    var question11 = document.getElementById('question11');
+    var noPoliceInfo = document.getElementById('noPoliceInfo');
+    var obtainPoliceInfo = document.getElementById('obtainPoliceInfo');
+
+    question11.style.display = 'none';
+
+    noPoliceInfo.addEventListener('change', function() {
+        if (noPoliceInfo.checked) {
+            question11.style.display = 'none';
+        }
+    });
+
+    obtainPoliceInfo.addEventListener('change', function() {
+        if (obtainPoliceInfo.checked) {
+            question11.style.display = 'block';
+        }
+    }); 
+
+    // Function to add new officer inputs
+    var officerIndex = 1;
+    addOfficerButton.addEventListener('click', function() {
+        var newOfficer = document.createElement('p');
+        newOfficer.innerHTML = `
+            <input type="text" name="police_name_${officerIndex}" placeholder="Officer Name...">
+            <input type="text" name="police_badge_${officerIndex}" placeholder="Officer Badge Number...">
+            <input type="text" name="police_station_${officerIndex}" placeholder="Police Station...">
+        `;
+        officerContainer.appendChild(newOfficer);
+        officerIndex++;
+    });
+});
+</script>
+{% endblock %}
