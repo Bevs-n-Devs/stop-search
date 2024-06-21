@@ -67,8 +67,8 @@ class ReportedBy(Base):
     __tablename__ = 'reported_by'
     reported_by_id = Column(Integer, primary_key=True, autoincrement=True)
     confirm_email = Column(String(255), nullable=False, unique=False)
-    report_type = relationship('ReportType', backref='report_type_')
-    report_date = relationship('ReportDate', backref='report_date_')
+    formn_type = relationship('ReportType', backref='formn_type_')
+    form_date = relationship('ReportDate', backref='form_date_')
     report_data_id = Column(Integer, ForeignKey('report_data.report_data_id'))
 
 class VictimInformation(Base):
@@ -86,6 +86,7 @@ class PublicRelations(Base):
     search_reason = Column(String(55), nullable=False)
     search_type = Column(String(10), nullable=False)
     additional_notes = Column(Text, nullable=True)
+    report_media = relationship('ReportMedia', backref='report_media_')
     incident_address = relationship('IncidentAddress', backref='incident_address_')
     report_data_id = Column(Integer, ForeignKey('report_data.report_data_id'))
 
@@ -93,7 +94,7 @@ class PoliceInformation(Base):
     __tablename__ = 'police_information'
     police_information_id = Column(Integer, primary_key=True, autoincrement=True)
     number_of_police = Column(String(8), nullable=False)
-    obtain_police_info = Column(Integer, nullable=False) # 0 = False, 1 = True
+    obtain_police_info = Column(String(3), nullable=False)
     officer_information = relationship('OfficerInformation', backref='officer_information_')
     report_data_id = Column(Integer, ForeignKey('report_data.report_data_id'))
 
@@ -117,7 +118,7 @@ class ReportDate(Base):
 class IncidentAddress(Base):
     __tablename__ = 'incident_address'
     incident_address_id = Column(Integer, primary_key=True, autoincrement=True)
-    addressType = Column(String(16), nullable=False)  # automaticAddress or manualAddress
+    address_type = Column(String(16), nullable=False)  # automaticAddress or manualAddress
     street_name = Column(String(50), nullable=False)
     town_or_city = Column(String(50), nullable=False)
     country = Column(String(50), default='UK')
@@ -138,3 +139,10 @@ class MapCoordinates(Base):
     longitude = Column(Float, nullable=False)
     latitude = Column(Float, nullable=False)
     incident_address_id = Column(Integer, ForeignKey('incident_address.incident_address_id'))
+
+class ReportMedia(Base):
+    __tablename__ = 'report_media'
+    report_media_id = Column(Integer, primary_key=True, autoincrement=True)
+    media_file_path = Column(String(150), nullable=True, unique=True)
+    public_relations_id = Column(Integer, ForeignKey('public_relations.public_relations_id'))
+    

@@ -6,7 +6,7 @@
 {% block header %}{% endblock %}
 
 {% block content %}
-<form action="{{ url_for('report_endpoint') }}" method="post">
+<form action="{{ url_for('submit_report') }}" method="post" enctype="multipart/form-data">
 
     <h1>Stop Search UK Report</h1>
 
@@ -17,20 +17,20 @@
         <p id="question3">
             {{ question_3 }}
             <b><label for="witness">{{ question_3_option_1 }}</label></b>
-            <input type="radio" name="form_type" id="witness" required>
+            <input type="radio" name="form_type" id="witness" value="{{ question_3_option_1 }}" required>
             <b><label for="victim">{{ question_3_option_2 }}</label></b>
-            <input type="radio" name="form_type" id="victim" required>
+            <input type="radio" name="form_type" id="victim" value="{{ question_3_option_2 }}" required>
         </p>
         <p id="question4">
-            {{ question_4}}
+            {{ question_4 }}
             <input type="datetime-local" name="form_date" id="formDate" required>
         </p>
         <p id="question5">
             {{ question_5 }}
             <b><label for="automaticAddress">{{ question_5_option_1 }}</label></b>
-            <input type="radio" name="address_type" id="automaticAddress" required>
+            <input type="radio" name="address_type" id="automaticAddress" value="{{ question_5_option_1 }}" required>
             <b><label for="manualAddress">{{ question_5_option_2 }}</label></b>
-            <input type="radio" name="address_type" id="manualAddress" required>
+            <input type="radio" name="address_type" id="manualAddress" value="{{ question_5_option_2 }}" required>
             <div id="userIncidentAddress">
                 <label for="streetName">Street Name:</label>
                 <input type="text" name="street_name" id="streetName" placeholder="door number, street name">
@@ -38,6 +38,10 @@
                 <label for="townOrCity">Town or City:</label>
                 <input type="text" name="town_or_city" id="townOrCity" placeholder="town or city, (postcode optional)">
             </div>
+            <!-- <label id="latitude">Latitude</label> -->
+            <input type="hidden" name="latitude" id="latitude">
+            <!-- <label id="longitude">Longitude</label> -->
+            <input type="hidden" name="longitude" id="longitude">
         </p>
         <p id="question6">
             {{  question_6 }}
@@ -120,11 +124,11 @@
         <p id="question9">
             {{  question_9 }}
             <b><label for="unknown">{{ question_9_option_1 }}</label></b>
-            <input type="radio" name="searchType" id="unknown" required>
-            <b><label for="unknown">{{ question_9_option_2 }}</label></b>
-            <input type="radio" name="searchType" id="unknown" required>
+            <input type="radio" name="search_type" id="unknown" value="{{ question_9_option_1 }}" required>
+            <b><label for="moderate">{{ question_9_option_2 }}</label></b>
+            <input type="radio" name="search_type" id="moderate" value="{{ question_9_option_2 }}" required>
             <b><label for="aggressive">{{ question_9_option_3 }}</label></b>
-            <input type="radio" name="searchType" id="aggressive" required>
+            <input type="radio" name="search_type" id="aggressive" value="{{ question_9_option_3 }}" required>
         </p>
         <p id="question8">
             {{ question_8 }}
@@ -144,18 +148,18 @@
         <p id="question10">
             {{  question_10 }}
             <b><label for="noPoliceInfo">{{ question_10_option_2 }}</label></b>
-            <input type="radio" name="getPoliceInfo" id="noPoliceInfo" required>
+            <input type="radio" name="getPoliceInfo" id="noPoliceInfo" value="{{ question_10_option_2 }}" required>
             <b><label for="obtainPoliceInfo">{{ question_10_option_1 }}</label></b>
-            <input type="radio" name="getPoliceInfo" id="obtainPoliceInfo" required>
+            <input type="radio" name="getPoliceInfo" id="obtainPoliceInfo" value="{{ question_10_option_1 }}" required>
         </p>
         <div id="officerContainer">
             <p id="question11">
                 {{ question_11 }}
                 <br>
-                <input type="text" name="police_name" id="policeName" placeholder="Officer Name...">
-                <input type="text" name="police_badge" id="policeName" placeholder="Officer Badge Number...">
-                <input type="text" name="police_station" id="policeName" placeholder="Police Station...">
-                <button type="button" name="add_new_officer" id="addOfficerButton">Add new Officer</button>
+                <input type="text" name="police_name_0" id="policeName" placeholder="Officer Name...">
+                <input type="text" name="police_badge_0" id="policeName" placeholder="Officer Badge Number...">
+                <input type="text" name="police_station_0" id="policeName" placeholder="Police Station...">
+                <button type="button" id="addOfficerButton">Add new Officer</button>
             </p>
         </div>
         <p id="question15">
@@ -165,6 +169,7 @@
         </p>
         <p id="question16">
             {{ question_16 }}
+            <input type="file" name="media_files" accept="video/*,image/*" multiple>
         </p>
 
         <button type="submit">Submit Form</button>
@@ -192,6 +197,17 @@ document.addEventListener('DOMContentLoaded', function() {
     automaticAddress.addEventListener('change', function() {
         if (automaticAddress.checked) {
             userIncidentAddress.style.display = 'none';
+        }
+        // Get the user's current location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                document.getElementById('latitude').value = position.coords.latitude;
+                document.getElementById('longitude').value = position.coords.longitude;
+            }, function(error) {
+                console.error("Error getting location: " + error.message);
+            });
+        } else {
+            console.error("Geolocation is not supported by this browser.");
         }
     });
     

@@ -142,5 +142,17 @@ def report_endpoint():
             question_14_option_3=question_14_option_3, question_14_option_4=question_14_option_4, question_14_option_5=question_14_option_5,
             question_14_option_6=question_14_option_6, question_14_option_7=question_14_option_7, question_14_option_8=question_14_option_8,
             question_14_option_9=question_14_option_9, question_14_option_10=question_14_option_10)
-    else:
-        pass
+    # else:
+    #     # get data from form
+        
+    #     # send data to backend
+    #     api_response = requests.post("http://localhost:8000/submit_report", json=form_data)
+    #     api_response.raise_for_status() # check for request errors
+
+    #     response = api_response.json()
+
+    #     if response["status"] == "success":
+    #         return render_template("report_page.html", success_message=response["message"])
+    #     else:
+    #         return render_template("report_page.html", error_message=response["message"])
+ 
