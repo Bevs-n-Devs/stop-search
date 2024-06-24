@@ -67,7 +67,7 @@ class ReportedBy(Base):
     __tablename__ = 'reported_by'
     reported_by_id = Column(Integer, primary_key=True, autoincrement=True)
     confirm_email = Column(String(255), nullable=False, unique=False)
-    formn_type = relationship('ReportType', backref='formn_type_')
+    form_type = relationship('ReportType', backref='formn_type_')
     form_date = relationship('ReportDate', backref='form_date_')
     report_data_id = Column(Integer, ForeignKey('report_data.report_data_id'))
 
