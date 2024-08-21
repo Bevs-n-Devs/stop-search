@@ -73,20 +73,33 @@ def submit_report():
         # get officer details
         officers = []
         officer_index = 0
-        while True:
-            police_name = request.form.get(f"police_name_{officer_index}")
-            police_badge = request.form.get(f"police_badge_{officer_index}")
-            police_station = request.form.get(f"police_badge_{officer_index}")
-            if not police_name and not police_badge and not police_station:
-                break
+        if form_data['get_police_info'] == 'no':
+            police_name = '--'
+            police_badge = '--'
+            police_station = '--'
             officers.append({
-                "police_name": police_name,
-                "police_badge": police_badge,
-                "police_station": police_station
+                    "police_name": police_name,
+                    "police_badge": police_badge,
+                    "police_station": police_station
             })
-            officer_index += 1
+            form_data['police_officers'] = officers
 
-        form_data['police_officers'] = officers
+        if form_data['get_police_info'] == 'yes':
+            
+            while True:
+                police_name = request.form.get(f"police_name_{officer_index}")
+                police_badge = request.form.get(f"police_badge_{officer_index}")
+                police_station = request.form.get(f"police_badge_{officer_index}")
+                if not police_name and not police_badge and not police_station:
+                    break
+                officers.append({
+                    "police_name": police_name,
+                    "police_badge": police_badge,
+                    "police_station": police_station
+                })
+                officer_index += 1
+            form_data['police_officers'] = officers
+
 
         # handle media file upload
         if "media_files" in request.files:
@@ -114,24 +127,24 @@ def submit_report():
         with app.app_context():
             # add to ReportData
             user_data = report_service.create_new_report_data(
-                email=form_data['report_email']
+                email=form_data['report_email'].lower()
             )
 
             # add to ReportedBy
             user_reported_by = report_service.create_new_report_by(
-                confirm_email=form_data['confirm_report_email'],
+                confirm_email=form_data['confirm_report_email'].lower(),
                 new_report_data_id=user_data
             )
 
             # add to ReportType 
-            user_report_type = report_service.create_new_report_type(
+            user_form_type = report_service.create_new_report_type(
                 report_type=form_data['form_type'],
                 new_report_by_id=user_reported_by
             )
 
             # add to ReportDate
             user_report_date = report_service.create_new_report_date(
-                get_date=get_date,
+                get_date=request.form.get('form_date'),
                 new_report_by_id=user_reported_by,
             )
 
@@ -162,8 +175,8 @@ def submit_report():
 
             # add to MapCoordinates
             user_map_coordinates = report_service.create_new_map_coordinates(
-                lattitude=form_data['map'][0]['lattitude'],
-                longitude=form_data['map'][0]['longitude'],
+                lat=float(request.form.get('latitude')),
+                long=float(request.form.get('longitude')),
                 new_incident_address_id=user_incident_address
             )
 
@@ -177,7 +190,7 @@ def submit_report():
                     ) 
 
             # add to PoliceInformation
-            user_police_info = report_service.create_new_police_officer_information(
+            user_police_info = report_service.create_new_police_information(
                 num_police=form_data['number_of_police'],
                 get_police_info=form_data['get_police_info'],
                 new_report_data_id=user_data
@@ -193,6 +206,7 @@ def submit_report():
                         police_station=officer['police_station'],
                         new_police_info_id=user_police_info
                     )
+        # TO DO: get data from database to display back to the user.
         
         return jsonify({'status': 'success', 'message': 'Report submitted successfully'}, form_data, coordinate_address), 200
         

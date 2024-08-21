@@ -82,7 +82,7 @@ def report_endpoint():
 
         question_10_option_1 = questions[3]["PoliceInformation"][1]["select_options"][0]["option_1"]
         question_10_option_2 = questions[3]["PoliceInformation"][1]["select_options"][1]["option_2"]
-
+ 
         question_12_option_1 = questions[1]["VictimInformation"][1]["select_options"][0]["option_1"]
         question_12_option_2 = questions[1]["VictimInformation"][1]["select_options"][1]["option_2"]
         question_12_option_3 = questions[1]["VictimInformation"][1]["select_options"][2]["option_3"]
@@ -142,7 +142,9 @@ def report_endpoint():
             question_14_option_3=question_14_option_3, question_14_option_4=question_14_option_4, question_14_option_5=question_14_option_5,
             question_14_option_6=question_14_option_6, question_14_option_7=question_14_option_7, question_14_option_8=question_14_option_8,
             question_14_option_9=question_14_option_9, question_14_option_10=question_14_option_10)
-    # else:
+    else:
+        # TODO: Handle the error handling
+        return 'This page could not load'
     #     # get data from form
         
     #     # send data to backend

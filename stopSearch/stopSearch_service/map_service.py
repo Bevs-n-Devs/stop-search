@@ -7,7 +7,7 @@ from stopSearch.stopSearch_database.models import (
     VictimInformation,
     PublicRelations,
     PoliceInformation,
-    ReportType,
+    FormType,
     ReportDate,
     IncidentAddress,
     OfficerInformation,
@@ -19,7 +19,7 @@ init_db()
 def get_all_map_data():
     """
     SELECT RD.report_data_id,
-           RT.report_type
+           RT.form_type
            RDate.report_date,
            RDate.formatted_day,
            RDate.formatted_weekday,
@@ -47,7 +47,7 @@ def get_all_map_data():
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -72,7 +72,7 @@ def get_all_map_data():
         sql_query = select(ReportData).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(

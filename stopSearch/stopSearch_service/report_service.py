@@ -8,7 +8,7 @@ from stopSearch.stopSearch_database.models import (
     VictimInformation,
     PublicRelations,
     PoliceInformation,
-    ReportType,
+    FormType,
     ReportDate,
     IncidentAddress,
     OfficerInformation,
@@ -38,6 +38,8 @@ def create_new_report_data(email: str) -> list[ReportData]:
         
         except Exception as e:
             return {"SQL Error": e}
+        finally:
+            session.close()
 
 def create_new_report_by(confirm_email: str, new_report_data_id: ReportData) -> list[ReportedBy]:
     """
@@ -51,7 +53,7 @@ def create_new_report_by(confirm_email: str, new_report_data_id: ReportData) -> 
             session = LocalSession()
             new_report_by = ReportedBy(
                 confirm_email = confirm_email,
-                reported_by = new_report_data_id
+                reported_by_ = new_report_data_id
             )
 
             session.add(new_report_by)
@@ -61,45 +63,23 @@ def create_new_report_by(confirm_email: str, new_report_data_id: ReportData) -> 
         
         except Exception as e:
             return {"SQL Error": e}
-
-
-def create_new_report_type(confirm_email: str, new_report_data_id: ReportData) -> list[ReportedBy]:
-    """
-    Takes the users confirmation email to store in ReportedBy table.
-    Table linked to ReportData via foreign key.
-
-    Returns ReportedBy object.
-    """
-    with app.app_context():
-        try:
-            session = LocalSession()
-            new_report_by = ReportedBy(
-                confirm_email = confirm_email.lower(),
-                reported_by = new_report_data_id
-            )
-
-            session.add(new_report_by)
-            session.commit()
-
-            return new_report_by
-        
-        except Exception as e:
-            return {"SQL Error": e}
+        finally:
+            session.close()
         
 
-def create_new_report_type(report_type: str, new_report_by_id: ReportedBy) -> list[ReportType]:
+def create_new_report_type(report_type: str, new_report_by_id: ReportedBy) -> list[FormType]:
     """
-    Records if user is a victim or witness into ReportType table.
+    Records if user is a victim or witness into FormType table.
     Table linked to ReportedBy via foerign key.
 
-    Returns ReportType object.
+    Returns FormType object.
     """
     with app.app_context():
         try:
             session = LocalSession()
-            new_report_type = ReportType(
-                report_type = report_type,
-                form_type = new_report_by_id
+            new_report_type = FormType(
+                report_type = report_type.lower(),
+                form_type_ = new_report_by_id
             )
 
             session.add(new_report_type)
@@ -109,6 +89,8 @@ def create_new_report_type(report_type: str, new_report_by_id: ReportedBy) -> li
         
         except Exception as e:
             return {'SQL Error': e}
+        finally:
+            session.close()
         
 
 def create_new_report_date(get_date: str, new_report_by_id: ReportedBy) -> list[ReportDate]:
@@ -127,13 +109,13 @@ def create_new_report_date(get_date: str, new_report_by_id: ReportedBy) -> list[
             date_list_object = utils.convert_datetime_to_string_and_parse_object(form_date=get_date)
 
             new_report_date = ReportDate(
-                report_date = datetime_object[1][0],
-                formatted_day = date_list_object[0][2],
-                formatted_weekday = date_list_object[0][0],
-                formatted_month = date_list_object[0][1],
-                formatted_year = date_list_object[0][4],
-                formatted_time = date_list_object[0][3],
-                form_date = new_report_by_id
+                report_date = str(date_list_object[1]),
+                formatted_day = str(date_list_object[0][2]),
+                formatted_week = str(date_list_object[0][0]),
+                formatted_month = str(date_list_object[0][1]),
+                formatted_year = str(date_list_object[0][4]),
+                formatted_time = str(date_list_object[0][3]),
+                form_date_ = new_report_by_id
             )
 
             session.add(new_report_date)
@@ -142,7 +124,9 @@ def create_new_report_date(get_date: str, new_report_by_id: ReportedBy) -> list[
             return new_report_date
         
         except Exception as e:
-            return {'SQL Error': e} 
+            return {'SQL Error': e}
+        finally:
+            session.close()
 
 
 def create_new_victim_information(num_victims: str, victim_age: str, victim_gender: str, victim_race: str, new_report_data_id: ReportData) -> list[VictimInformation]:
@@ -160,7 +144,7 @@ def create_new_victim_information(num_victims: str, victim_age: str, victim_gend
               victim_age = victim_age,
               victim_gender = victim_gender,
               victim_race = victim_race, 
-              victim_information = new_report_data_id
+              victim_information_ = new_report_data_id
             )
 
             session.add(new_victim_info)
@@ -170,6 +154,8 @@ def create_new_victim_information(num_victims: str, victim_age: str, victim_gend
         
         except Exception as e:
             return {'SQL Error': e}
+        finally:
+            session.close()
         
 
 def create_new_public_relations(search_reason: str, search_type: str, report_notes: str, new_report_data_id: ReportData) -> list[PublicRelations]:
@@ -186,7 +172,7 @@ def create_new_public_relations(search_reason: str, search_type: str, report_not
                 search_reason = search_reason,
                 search_type = search_type,
                 additional_notes = report_notes,
-                public_relations = new_report_data_id
+                public_relations_ = new_report_data_id
             )
 
             session.add(new_public_relations)
@@ -196,6 +182,8 @@ def create_new_public_relations(search_reason: str, search_type: str, report_not
 
         except Exception as e:
             return {'SQL Error': e}
+        finally:
+            session.close()
 
 
 def  create_new_incident_address(address_type: str, street_name: str, town_city: str, new_public_relations_id: PublicRelations) -> list[IncidentAddress]:
@@ -212,7 +200,7 @@ def  create_new_incident_address(address_type: str, street_name: str, town_city:
                 address_type = address_type,
                 street_name = street_name,
                 town_or_city = town_city,
-                incident_address = new_public_relations_id
+                incident_address_ = new_public_relations_id
             )
 
             session.add(new_incident_address)
@@ -222,9 +210,11 @@ def  create_new_incident_address(address_type: str, street_name: str, town_city:
         
         except Exception as e:
             return {'SQL Error': e}
+        finally:
+            session.close()
 
 
-def create_new_map_coordinates(lattitude: float, longitude: float, new_incident_address_id: IncidentAddress) -> list[MapCoordinates]:
+def create_new_map_coordinates(lat: float, long: float, new_incident_address_id: IncidentAddress) -> list[MapCoordinates]:
     """
     Records the lattitude & longitude of and stores into MapCoordinates table.
     Table linked to IncidentAddress via foreign key.
@@ -235,9 +225,9 @@ def create_new_map_coordinates(lattitude: float, longitude: float, new_incident_
         try:
             session = LocalSession()
             new_map_coordinates = MapCoordinates(
-                lattitude = lattitude,
-                longitude = longitude,
-                map_coordinates = new_incident_address_id
+                lattitude = float(lat),
+                longitude = float(long),
+                map_coordinates_ = new_incident_address_id
             )
 
             session.add(new_map_coordinates)
@@ -247,9 +237,11 @@ def create_new_map_coordinates(lattitude: float, longitude: float, new_incident_
         
         except Exception as e:
             return {'SQL Error': e}
+        finally:
+            session.close()
 
 
-def create_new_police_officer_information(num_police: str, get_police_info: str, new_report_data_id: ReportData) -> list[PoliceInformation]:
+def create_new_police_information(num_police: str, get_police_info: str, new_report_data_id: ReportData) -> list[PoliceInformation]:
     """
     Records the actions of the police at the scene into PoliceInformation table.
     Table linked to ReportData via foreign key.
@@ -262,7 +254,7 @@ def create_new_police_officer_information(num_police: str, get_police_info: str,
             new_police_info = PoliceInformation(
                 number_of_police = num_police,
                 obtain_police_info = get_police_info,
-                police_information = new_report_data_id
+                police_information_ = new_report_data_id
             )
 
             session.add(new_police_info)
@@ -272,6 +264,8 @@ def create_new_police_officer_information(num_police: str, get_police_info: str,
         
         except Exception as e:
             return {'SQL Error': e}
+        finally:
+            session.close()
 
 
 def create_new_officer_information(badge_num: str, police_name: str, police_station: str, new_police_info_id: PoliceInformation) -> list[OfficerInformation]:
@@ -288,7 +282,7 @@ def create_new_officer_information(badge_num: str, police_name: str, police_stat
                 badge_number = badge_num,
                 officer_name = police_name,
                 police_station = police_station,
-                officer_information = new_police_info_id
+                officer_information_ = new_police_info_id
             )
 
             session.add(new_officer_info)
@@ -298,6 +292,8 @@ def create_new_officer_information(badge_num: str, police_name: str, police_stat
         
         except Exception as e:
             return {'SQL Error': e}
+        finally:
+            session.close()
 
 def create_new_report_media(media_path: str, new_public_id: PublicRelations) -> list[ReportMedia]:
     """
@@ -311,7 +307,7 @@ def create_new_report_media(media_path: str, new_public_id: PublicRelations) -> 
             session = LocalSession()
             new_report_media = ReportMedia(
                 media_file_path = media_path,
-                report_media_file = new_public_id
+                report_media_ = new_public_id
             )
 
             session.add(new_report_media)
@@ -321,12 +317,14 @@ def create_new_report_media(media_path: str, new_public_id: PublicRelations) -> 
         
         except Exception as e:
             return {'SQL Error': e}
+        finally:
+            session.close()
         
 # get form data from database
 def get_all_reports():
     """
     SELECT RD.report_data_id,
-           RT.report_type
+           RT.form_type
            RDate.report_date,
            RDate.formatted_day,
            RDate.formatted_weekday,
@@ -354,7 +352,7 @@ def get_all_reports():
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -379,7 +377,7 @@ def get_all_reports():
         sql_query = select(ReportData).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -404,3 +402,5 @@ def get_all_reports():
         
         except Exception as e:
             return {'SQL Error': e}
+        finally:
+            session.close()

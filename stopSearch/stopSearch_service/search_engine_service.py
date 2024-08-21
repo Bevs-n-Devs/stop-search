@@ -7,7 +7,7 @@ from stopSearch.stopSearch_database.models import (
     VictimInformation,
     PublicRelations,
     PoliceInformation,
-    ReportType,
+    FormType,
     ReportDate,
     IncidentAddress,
     OfficerInformation,
@@ -17,61 +17,68 @@ from stopSearch.stopSearch_database.models import (
 init_db()
 
 
-def search_all_reports():
-    """
-    SELECT RD.report_data_id,
-           RT.report_type
-           RDate.report_date,
-           RDate.formatted_day,
-           RDate.formatted_weekday,
-           RDate.formatted_year,
-           RDate.formatted_time,
-           VI.number_of_victims,
-           VI.victim_age,
-           VI.victim_gender,
-           VI.victim_race,
-           PR.search_reason,
-           PR.search_type,
-           PR.additional_notes,
-           RM.media_file_path
-           IA.address_type,
-           IA.street_name,
-           IA.town_or_city,
-           MC.longitude,
-           MC.latitude,
-           PI.number_of_police,
-           PI.obtain_police_info,
-           OI.badge_number,
-           OI.officer_name,
-           OI.police_station
-    FROM stop_search_dev_db.report_data RD 
-        JOIN stop_search_dev_db.reported_by RB
-            ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
-            ON RB.reported_by_id = RD.report_type_id
-        JOIN stop_search_dev_db.report_date RDate
-            ON RB.reported_by_id = RDate.report_date_id
-        JOIN stop_search_dev_db.victim_information VI
-            ON RD.report_data_id = VI.victim_information_id
-        JOIN stop_search_dev_db.public_relations PR
-            ON RD.report_data_id = PR.public_relations_id
-        JOIN stop_search_dev_db.report_media RM
-            ON PR.public_relations_id = RM.report_media_id
-        JOIN stop_search_dev_db.incident_address IA
-            ON PR.public_relations_id = IA.incident_address_id
-        JOIN stop_search_dev_db.map_coordinates MC
-            ON IA.incident_address_id = MC.map_coordinates_id
-        JOIN stop_search_dev_db.police_information PI
-            ON RD.report_data_id = PI.police_information_id
-        JOIN stop_search_dev_db.officer_information OI
-            ON PI.police_information_id = OI.officer_information_id
-    """
+
+def temp_serach():
+    with app.app_context():
+        session = LocalSession()
+        
+        sql_query = select(
+            ReportData.report_data_id,
+            FormType.report_type,
+            ReportDate.report_date,
+            ReportDate.formatted_month,
+            ReportDate.formatted_year,
+            ReportDate.formatted_time,
+            VictimInformation.number_of_victims,
+            VictimInformation.victim_age,
+            VictimInformation.victim_race,
+            VictimInformation.victim_gender,
+            PublicRelations.search_reason,
+            PublicRelations.search_type,
+            PublicRelations.additional_notes,
+            # IncidentAddress.street_name,
+            # IncidentAddress.town_or_city,
+            # MapCoordinates.longitude,
+            # MapCoordinates.latitude,
+            # PoliceInformation.number_of_police,
+            # PoliceInformation.obtain_police_info,
+            # OfficerInformation.badge_number,
+            # OfficerInformation.officer_name,
+            # OfficerInformation.police_station,
+        ).join(
+            ReportedBy, ReportData.report_data_id==ReportedBy.report_data_id 
+        ).join(
+            FormType, ReportedBy.reported_by_id==FormType.form_type_id        
+        ).join(
+            ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
+        ).join(
+            VictimInformation, ReportData.report_data_id==VictimInformation.report_data_id
+        )
+        # ).join(
+        #     PublicRelations, ReportData.report_data_id==PublicRelations.report_data_id
+        # ).join(
+        #     IncidentAddress, PublicRelations.public_relations_id==IncidentAddress.incident_address_id
+        # ).join(
+        #     MapCoordinates, IncidentAddress.incident_address_id==MapCoordinates.map_coordinates_id
+        # ).join(
+        #     PoliceInformation, ReportData.report_data_id==PoliceInformation.report_data_id
+        # ).join(
+        #     OfficerInformation, PoliceInformation.police_information_id==OfficerInformation.officer_information_id
+        # )
+        
+        try:
+            all_data = session.execute(sql_query).all()
+            return all_data
+        except Exception as e:
+            return {"SQL Error": e}
+
+def temp_search_ReportData():
     with app.app_context():
         session = LocalSession()
 
-        sql_query = select(
+        sql_query = (select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -84,7 +91,63 @@ def search_all_reports():
             PublicRelations.search_reason,
             PublicRelations.search_type,
             PublicRelations.additional_notes,
-            ReportMedia.media_file_path,
+            IncidentAddress.address_type,
+            IncidentAddress.street_name,
+            IncidentAddress.town_or_city,
+            MapCoordinates.longitude,
+            MapCoordinates.latitude,
+            PoliceInformation.number_of_police,
+            PoliceInformation.obtain_police_info,
+            OfficerInformation.badge_number,
+            OfficerInformation.officer_name,
+            OfficerInformation.police_station
+        ).join_from(
+            ReportData, ReportedBy, ReportData.report_data_id == ReportedBy.report_data_id
+        ).join_from(
+            ReportedBy, FormType, ReportedBy.reported_by_id == FormType.reported_by_id
+        ).join_from(
+            ReportedBy, ReportDate, ReportedBy.reported_by_id == ReportDate.reported_by_id
+        ).join_from(
+            ReportData, VictimInformation, ReportData.report_data_id == VictimInformation.report_data_id
+        ).join_from(
+            ReportData, PublicRelations, ReportData.report_data_id == PublicRelations.report_data_id
+        ).join_from(
+            PublicRelations, IncidentAddress, PublicRelations.public_relations_id == IncidentAddress.public_relations_id 
+        ).join_from(
+            IncidentAddress, MapCoordinates, IncidentAddress.incident_address_id == MapCoordinates.incident_address_id
+        ).join_from(
+            ReportData, PoliceInformation, ReportData.report_data_id == PoliceInformation.report_data_id
+        ).join_from(
+            PoliceInformation, OfficerInformation, PoliceInformation.police_information_id == OfficerInformation.police_information_id
+        ))
+
+        try:
+            temp_data  = session.execute(sql_query).all()
+            return temp_data
+        except Exception as e:
+            return {"SQL Error": str(e)}
+
+
+def search_all_reports():
+    with app.app_context():
+        session = LocalSession()
+
+        sql_query = select(
+            ReportData.report_data_id,
+            FormType.report_type,
+            ReportDate.report_date,
+            ReportDate.formatted_day,
+            ReportDate.formatted_weekday,
+            ReportDate.formatted_year,
+            ReportDate.formatted_time,
+            VictimInformation.number_of_victims,
+            VictimInformation.victim_age,
+            VictimInformation.victim_gender,
+            VictimInformation.victim_race,
+            PublicRelations.search_reason,
+            PublicRelations.search_type,
+            PublicRelations.additional_notes,
+            # ReportMedia.media_file_path,
             IncidentAddress.address_type,
             IncidentAddress.street_name,
             IncidentAddress.town_or_city,
@@ -96,25 +159,26 @@ def search_all_reports():
             OfficerInformation.officer_name,
             OfficerInformation.police_station
         ).join(
-            ReportedBy, ReportData.report_data_id==ReportData.report_data_id
+            ReportedBy, ReportData.report_data_id == ReportedBy.reported_by_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id == FormType.form_type_id
         ).join(
-            ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
+            ReportDate, ReportedBy.reported_by_id == ReportDate.report_date_id
         ).join(
-            VictimInformation, ReportData.report_data_id==VictimInformation.victim_information_id
+            VictimInformation, ReportData.report_data_id == VictimInformation.victim_information_id
         ).join(
-            PublicRelations, ReportData.report_data_id==PublicRelations.public_relations_id
+            PublicRelations, ReportData.report_data_id == PublicRelations.public_relations_id
+        # ).join(
+        #     ReportMedia, PublicRelations.public_relations_id == ReportMedia.report_media_id
+        # )
         ).join(
-            ReportMedia, PublicRelations.public_relations_id==ReportMedia.report_media_id
+            IncidentAddress, PublicRelations.public_relations_id == IncidentAddress.incident_address_id
         ).join(
-            IncidentAddress, PublicRelations.public_relations_id==IncidentAddress.incident_address_id
+            MapCoordinates, IncidentAddress.incident_address_id == MapCoordinates.map_coordinates_id
         ).join(
-            MapCoordinates, IncidentAddress.incident_address_id==MapCoordinates.map_coordinates_id
+            PoliceInformation, ReportData.report_data_id == PoliceInformation.police_information_id
         ).join(
-            PoliceInformation, ReportData.report_data_id==PoliceInformation.police_information_id
-        ).join(
-            OfficerInformation, PoliceInformation.police_information_id==OfficerInformation.officer_information_id
+            OfficerInformation, PoliceInformation.police_information_id == OfficerInformation.officer_information_id
         )
 
         try:
@@ -122,14 +186,122 @@ def search_all_reports():
             return all_data
         
         except Exception as e:
-            return {'SQL Error': e}
+            return {'SQL Error': str(e)}
+
+# def search_all_reports():
+#     """
+#     SELECT RD.report_data_id,
+#            FT.report_type,
+#            RDate.report_date,
+#            RDate.formatted_day,
+#            RDate.formatted_weekday,
+#            RDate.formatted_year,
+#            RDate.formatted_time,
+#            VI.number_of_victims,
+#            VI.victim_age,
+#            VI.victim_gender,
+#            VI.victim_race,
+#            PR.search_reason,
+#            PR.search_type,
+#            PR.additional_notes,
+#            RM.media_file_path
+#            IA.address_type,
+#            IA.street_name,
+#            IA.town_or_city,
+#            MC.longitude,
+#            MC.latitude,
+#            PI.number_of_police,
+#            PI.obtain_police_info,
+#            OI.badge_number,
+#            OI.officer_name,
+#            OI.police_station
+#     FROM stop_search_dev_db.report_data RD 
+#         JOIN stop_search_dev_db.reported_by RB
+#             ON RD.report_data_id = RB.reported_by_id
+#         JOIN stop_search_dev_db.form_type FT
+#             ON RB.reported_by_id = RD.report_type_id
+#         JOIN stop_search_dev_db.report_date RDate
+#             ON RB.reported_by_id = RDate.report_date_id
+#         JOIN stop_search_dev_db.victim_information VI
+#             ON RD.report_data_id = VI.victim_information_id
+#         JOIN stop_search_dev_db.public_relations PR
+#             ON RD.report_data_id = PR.public_relations_id
+#         JOIN stop_search_dev_db.report_media RM
+#             ON PR.public_relations_id = RM.report_media_id
+#         JOIN stop_search_dev_db.incident_address IA
+#             ON PR.public_relations_id = IA.incident_address_id
+#         JOIN stop_search_dev_db.map_coordinates MC
+#             ON IA.incident_address_id = MC.map_coordinates_id
+#         JOIN stop_search_dev_db.police_information PI
+#             ON RD.report_data_id = PI.police_information_id
+#         JOIN stop_search_dev_db.officer_information OI
+#             ON PI.police_information_id = OI.officer_information_id
+#     """
+#     with app.app_context():
+#         session = LocalSession()
+
+#         sql_query = select(
+#             ReportData.report_data_id,
+#             FormType.report_type,
+#             ReportDate.report_date,
+#             ReportDate.formatted_day,
+#             ReportDate.formatted_weekday,
+#             ReportDate.formatted_year,
+#             ReportDate.formatted_time,
+#             VictimInformation.number_of_victims,
+#             VictimInformation.victim_age,
+#             VictimInformation.victim_gender,
+#             VictimInformation.victim_race,
+#             PublicRelations.search_reason,
+#             PublicRelations.search_type,
+#             PublicRelations.additional_notes,
+#             ReportMedia.media_file_path,
+#             IncidentAddress.address_type,
+#             IncidentAddress.street_name,
+#             IncidentAddress.town_or_city,
+#             MapCoordinates.longitude,
+#             MapCoordinates.latitude,
+#             PoliceInformation.number_of_police,
+#             PoliceInformation.obtain_police_info,
+#             OfficerInformation.badge_number,
+#             OfficerInformation.officer_name,
+#             OfficerInformation.police_station
+#         ).join(
+#             ReportedBy, ReportData.report_data_id == ReportedBy.report_data_id
+#         ).join(
+#             FormType, ReportedBy.reported_by_id == FormType.reported_by_id  # Corrected
+#         ).join(
+#             ReportDate, ReportedBy.reported_by_id == ReportDate.reported_by_id  # Corrected
+#         ).join(
+#             VictimInformation, ReportData.report_data_id == VictimInformation.report_data_id
+#         ).join(
+#             PublicRelations, ReportData.report_data_id == PublicRelations.report_data_id  # Corrected
+#         ).join(
+#             ReportMedia, PublicRelations.public_relations_id == ReportMedia.public_relations_id  # Corrected
+#         ).join(
+#             IncidentAddress, PublicRelations.public_relations_id == IncidentAddress.public_relations_id  # Corrected
+#         ).join(
+#             MapCoordinates, IncidentAddress.incident_address_id == MapCoordinates.incident_address_id  # Corrected
+#         ).join(
+#             PoliceInformation, ReportData.report_data_id == PoliceInformation.report_data_id
+#         ).join(
+#             OfficerInformation, PoliceInformation.police_information_id == OfficerInformation.police_information_id
+#         )
+
+
+#         try:
+#             all_data = session.execute(sql_query).all()
+#             return all_data
+        
+#         except Exception as e:
+#             return {'SQL Error': e}
 
 
 def search_report_by_data_id(data_id: int):
     """
     SET @dataID = :report_data_id;
     SELECT RD.report_data_id,
-           RT.report_type
+           RT.form_type
            RDate.report_date,
            RDate.formatted_day,
            RDate.formatted_weekday,
@@ -156,7 +328,7 @@ def search_report_by_data_id(data_id: int):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -181,7 +353,7 @@ def search_report_by_data_id(data_id: int):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -206,15 +378,15 @@ def search_report_by_data_id(data_id: int):
             OfficerInformation.officer_name,
             OfficerInformation.police_station
         ).join(
-            ReportedBy, ReportData.report_data_id==ReportData.report_data_id
+            ReportedBy, ReportData.report_data_id==ReportedBy.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.form_type_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
-            VictimInformation, ReportData.report_data_id==VictimInformation.victim_information_id
+            VictimInformation, ReportData.report_data_id==VictimInformation.report_data_id
         ).join(
-            PublicRelations, ReportData.report_data_id==PublicRelations.public_relations_id
+            PublicRelations, ReportData.report_data_id==PublicRelations.report_data_id
         ).join(
             ReportMedia, PublicRelations.public_relations_id==ReportMedia.report_media_id
         ).join(
@@ -222,7 +394,7 @@ def search_report_by_data_id(data_id: int):
         ).join(
             MapCoordinates, IncidentAddress.incident_address_id==MapCoordinates.map_coordinates_id
         ).join(
-            PoliceInformation, ReportData.report_data_id==PoliceInformation.police_information_id
+            PoliceInformation, ReportData.report_data_id==PoliceInformation.report_data_id
         ).join(
             OfficerInformation, PoliceInformation.police_information_id==OfficerInformation.officer_information_id
         ).where(
@@ -268,7 +440,7 @@ def search_all_reports_by_report_type(report_type: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -286,14 +458,14 @@ def search_all_reports_by_report_type(report_type: str):
             ON RD.report_data_id = PI.police_information_id
         JOIN stop_search_dev_db.officer_information OI
             ON PI.police_information_id = OI.officer_information_id
-    WHERE RT.report_type = @reportType;
+    WHERE RT.form_type = @reportType;
     """
     with app.app_context():
         session = LocalSession()
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -320,7 +492,7 @@ def search_all_reports_by_report_type(report_type: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -338,7 +510,7 @@ def search_all_reports_by_report_type(report_type: str):
         ).join(
             OfficerInformation, PoliceInformation.police_information_id==OfficerInformation.officer_information_id
         ).where(
-            ReportType.report_type == report_type
+            FormType.report_type == report_type
         )
     try:
         data_report_type = session.execute(sql_query).all()
@@ -378,7 +550,7 @@ def search_all_reports_by_last_30_days():
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -416,7 +588,7 @@ def search_all_reports_by_last_30_days():
         
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -443,7 +615,7 @@ def search_all_reports_by_last_30_days():
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -503,7 +675,7 @@ def search_all_reports_by_last_90_days():
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -541,7 +713,7 @@ def search_all_reports_by_last_90_days():
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -568,7 +740,7 @@ def search_all_reports_by_last_90_days():
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -628,7 +800,7 @@ def search_all_reports_by_last_6_months():
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -666,7 +838,7 @@ def search_all_reports_by_last_6_months():
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -693,7 +865,7 @@ def search_all_reports_by_last_6_months():
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -753,7 +925,7 @@ def search_all_reports_by_last_12_months():
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -791,7 +963,7 @@ def search_all_reports_by_last_12_months():
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -818,7 +990,7 @@ def search_all_reports_by_last_12_months():
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -879,7 +1051,7 @@ def search_all_reports_by_victim_age(age: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -904,7 +1076,7 @@ def search_all_reports_by_victim_age(age: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -931,7 +1103,7 @@ def search_all_reports_by_victim_age(age: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -991,7 +1163,7 @@ def search_all_reports_by_victim_gender(gender: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -1016,7 +1188,7 @@ def search_all_reports_by_victim_gender(gender: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -1043,7 +1215,7 @@ def search_all_reports_by_victim_gender(gender: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -1103,7 +1275,7 @@ def search_all_reports_by_victim_race(race: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -1128,7 +1300,7 @@ def search_all_reports_by_victim_race(race: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -1155,7 +1327,7 @@ def search_all_reports_by_victim_race(race: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -1215,7 +1387,7 @@ def search_all_reports_by_search_type(type_of_search: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -1240,7 +1412,7 @@ def search_all_reports_by_search_type(type_of_search: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -1267,7 +1439,7 @@ def search_all_reports_by_search_type(type_of_search: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -1327,7 +1499,7 @@ def search_all_reports_by_search_reason(reason_for_search: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -1352,7 +1524,7 @@ def search_all_reports_by_search_reason(reason_for_search: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -1379,7 +1551,7 @@ def search_all_reports_by_search_reason(reason_for_search: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -1439,7 +1611,7 @@ def search_all_reports_by_police_badge_number(badge_num: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -1464,7 +1636,7 @@ def search_all_reports_by_police_badge_number(badge_num: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -1491,7 +1663,7 @@ def search_all_reports_by_police_badge_number(badge_num: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -1551,7 +1723,7 @@ def search_all_reports_by_police_station(station: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -1576,7 +1748,7 @@ def search_all_reports_by_police_station(station: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -1603,7 +1775,7 @@ def search_all_reports_by_police_station(station: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -1663,7 +1835,7 @@ def search_all_reports_by_number_of_police(police_name: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -1688,7 +1860,7 @@ def search_all_reports_by_number_of_police(police_name: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -1715,7 +1887,7 @@ def search_all_reports_by_number_of_police(police_name: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -1775,7 +1947,7 @@ def search_all_reports_by_address_type(address_type: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -1800,7 +1972,7 @@ def search_all_reports_by_address_type(address_type: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -1827,7 +1999,7 @@ def search_all_reports_by_address_type(address_type: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -1887,7 +2059,7 @@ def search_all_reports_by_street_name(street_name: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -1912,7 +2084,7 @@ def search_all_reports_by_street_name(street_name: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -1939,7 +2111,7 @@ def search_all_reports_by_street_name(street_name: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormTypeeported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -1999,7 +2171,7 @@ def search_all_reports_by_town_or_city(town_city: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -2024,7 +2196,7 @@ def search_all_reports_by_town_or_city(town_city: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -2051,7 +2223,7 @@ def search_all_reports_by_town_or_city(town_city: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -2110,7 +2282,7 @@ def search_all_reports_by_formatted_weekday(weekday: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -2135,7 +2307,7 @@ def search_all_reports_by_formatted_weekday(weekday: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -2162,7 +2334,7 @@ def search_all_reports_by_formatted_weekday(weekday: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -2221,7 +2393,7 @@ def search_all_reports_by_formatted_month(month: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -2246,7 +2418,7 @@ def search_all_reports_by_formatted_month(month: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -2273,7 +2445,7 @@ def search_all_reports_by_formatted_month(month: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -2333,7 +2505,7 @@ def search_all_reports_by_formatted_year(year: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -2358,7 +2530,7 @@ def search_all_reports_by_formatted_year(year: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -2385,7 +2557,7 @@ def search_all_reports_by_formatted_year(year: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
@@ -2445,7 +2617,7 @@ def search_all_reports_by_formatted_time(time: str):
     FROM stop_search_dev_db.report_data RD 
         JOIN stop_search_dev_db.reported_by RB
             ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.report_type RT
+        JOIN stop_search_dev_db.form_type RT
             ON RB.reported_by_id = RD.report_type_id
         JOIN stop_search_dev_db.report_date RDate
             ON RB.reported_by_id = RDate.report_date_id
@@ -2470,7 +2642,7 @@ def search_all_reports_by_formatted_time(time: str):
 
         sql_query = select(
             ReportData.report_data_id,
-            ReportType.report_type,
+            FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
             ReportDate.formatted_weekday,
@@ -2497,7 +2669,7 @@ def search_all_reports_by_formatted_time(time: str):
         ).join(
             ReportedBy, ReportData.report_data_id==ReportData.report_data_id
         ).join(
-            ReportType, ReportedBy.reported_by_id==ReportType.reported_by_id
+            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
         ).join(
             ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
         ).join(
