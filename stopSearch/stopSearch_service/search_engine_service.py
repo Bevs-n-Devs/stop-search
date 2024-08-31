@@ -18,116 +18,6 @@ init_db()
 
 
 
-def temp_serach():
-    with app.app_context():
-        session = LocalSession()
-        
-        sql_query = select(
-            ReportData.report_data_id,
-            FormType.report_type,
-            ReportDate.report_date,
-            ReportDate.formatted_month,
-            ReportDate.formatted_year,
-            ReportDate.formatted_time,
-            VictimInformation.number_of_victims,
-            VictimInformation.victim_age,
-            VictimInformation.victim_race,
-            VictimInformation.victim_gender,
-            PublicRelations.search_reason,
-            PublicRelations.search_type,
-            PublicRelations.additional_notes,
-            # IncidentAddress.street_name,
-            # IncidentAddress.town_or_city,
-            # MapCoordinates.longitude,
-            # MapCoordinates.latitude,
-            # PoliceInformation.number_of_police,
-            # PoliceInformation.obtain_police_info,
-            # OfficerInformation.badge_number,
-            # OfficerInformation.officer_name,
-            # OfficerInformation.police_station,
-        ).join(
-            ReportedBy, ReportData.report_data_id==ReportedBy.report_data_id 
-        ).join(
-            FormType, ReportedBy.reported_by_id==FormType.form_type_id        
-        ).join(
-            ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
-        ).join(
-            VictimInformation, ReportData.report_data_id==VictimInformation.report_data_id
-        )
-        # ).join(
-        #     PublicRelations, ReportData.report_data_id==PublicRelations.report_data_id
-        # ).join(
-        #     IncidentAddress, PublicRelations.public_relations_id==IncidentAddress.incident_address_id
-        # ).join(
-        #     MapCoordinates, IncidentAddress.incident_address_id==MapCoordinates.map_coordinates_id
-        # ).join(
-        #     PoliceInformation, ReportData.report_data_id==PoliceInformation.report_data_id
-        # ).join(
-        #     OfficerInformation, PoliceInformation.police_information_id==OfficerInformation.officer_information_id
-        # )
-        
-        try:
-            all_data = session.execute(sql_query).all()
-            return all_data
-        except Exception as e:
-            return {"SQL Error": e}
-
-def temp_search_ReportData():
-    with app.app_context():
-        session = LocalSession()
-
-        sql_query = (select(
-            ReportData.report_data_id,
-            FormType.report_type,
-            ReportDate.report_date,
-            ReportDate.formatted_day,
-            ReportDate.formatted_weekday,
-            ReportDate.formatted_year,
-            ReportDate.formatted_time,
-            VictimInformation.number_of_victims,
-            VictimInformation.victim_age,
-            VictimInformation.victim_gender,
-            VictimInformation.victim_race,
-            PublicRelations.search_reason,
-            PublicRelations.search_type,
-            PublicRelations.additional_notes,
-            IncidentAddress.address_type,
-            IncidentAddress.street_name,
-            IncidentAddress.town_or_city,
-            MapCoordinates.longitude,
-            MapCoordinates.latitude,
-            PoliceInformation.number_of_police,
-            PoliceInformation.obtain_police_info,
-            OfficerInformation.badge_number,
-            OfficerInformation.officer_name,
-            OfficerInformation.police_station
-        ).join_from(
-            ReportData, ReportedBy, ReportData.report_data_id == ReportedBy.report_data_id
-        ).join_from(
-            ReportedBy, FormType, ReportedBy.reported_by_id == FormType.reported_by_id
-        ).join_from(
-            ReportedBy, ReportDate, ReportedBy.reported_by_id == ReportDate.reported_by_id
-        ).join_from(
-            ReportData, VictimInformation, ReportData.report_data_id == VictimInformation.report_data_id
-        ).join_from(
-            ReportData, PublicRelations, ReportData.report_data_id == PublicRelations.report_data_id
-        ).join_from(
-            PublicRelations, IncidentAddress, PublicRelations.public_relations_id == IncidentAddress.public_relations_id 
-        ).join_from(
-            IncidentAddress, MapCoordinates, IncidentAddress.incident_address_id == MapCoordinates.incident_address_id
-        ).join_from(
-            ReportData, PoliceInformation, ReportData.report_data_id == PoliceInformation.report_data_id
-        ).join_from(
-            PoliceInformation, OfficerInformation, PoliceInformation.police_information_id == OfficerInformation.police_information_id
-        ))
-
-        try:
-            temp_data  = session.execute(sql_query).all()
-            return temp_data
-        except Exception as e:
-            return {"SQL Error": str(e)}
-
-
 def search_all_reports():
     with app.app_context():
         session = LocalSession()
@@ -137,7 +27,7 @@ def search_all_reports():
             FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
-            ReportDate.formatted_weekday,
+            ReportDate.formatted_week,
             ReportDate.formatted_year,
             ReportDate.formatted_time,
             VictimInformation.number_of_victims,
@@ -147,12 +37,12 @@ def search_all_reports():
             PublicRelations.search_reason,
             PublicRelations.search_type,
             PublicRelations.additional_notes,
-            # ReportMedia.media_file_path,
+            ReportMedia.media_file_path,
             IncidentAddress.address_type,
             IncidentAddress.street_name,
             IncidentAddress.town_or_city,
             MapCoordinates.longitude,
-            MapCoordinates.latitude,
+            MapCoordinates.lattitude,
             PoliceInformation.number_of_police,
             PoliceInformation.obtain_police_info,
             OfficerInformation.badge_number,
@@ -168,9 +58,8 @@ def search_all_reports():
             VictimInformation, ReportData.report_data_id == VictimInformation.victim_information_id
         ).join(
             PublicRelations, ReportData.report_data_id == PublicRelations.public_relations_id
-        # ).join(
-        #     ReportMedia, PublicRelations.public_relations_id == ReportMedia.report_media_id
-        # )
+        ).join(
+            ReportMedia, PublicRelations.public_relations_id == ReportMedia.report_media_id
         ).join(
             IncidentAddress, PublicRelations.public_relations_id == IncidentAddress.incident_address_id
         ).join(
@@ -188,166 +77,8 @@ def search_all_reports():
         except Exception as e:
             return {'SQL Error': str(e)}
 
-# def search_all_reports():
-#     """
-#     SELECT RD.report_data_id,
-#            FT.report_type,
-#            RDate.report_date,
-#            RDate.formatted_day,
-#            RDate.formatted_weekday,
-#            RDate.formatted_year,
-#            RDate.formatted_time,
-#            VI.number_of_victims,
-#            VI.victim_age,
-#            VI.victim_gender,
-#            VI.victim_race,
-#            PR.search_reason,
-#            PR.search_type,
-#            PR.additional_notes,
-#            RM.media_file_path
-#            IA.address_type,
-#            IA.street_name,
-#            IA.town_or_city,
-#            MC.longitude,
-#            MC.latitude,
-#            PI.number_of_police,
-#            PI.obtain_police_info,
-#            OI.badge_number,
-#            OI.officer_name,
-#            OI.police_station
-#     FROM stop_search_dev_db.report_data RD 
-#         JOIN stop_search_dev_db.reported_by RB
-#             ON RD.report_data_id = RB.reported_by_id
-#         JOIN stop_search_dev_db.form_type FT
-#             ON RB.reported_by_id = RD.report_type_id
-#         JOIN stop_search_dev_db.report_date RDate
-#             ON RB.reported_by_id = RDate.report_date_id
-#         JOIN stop_search_dev_db.victim_information VI
-#             ON RD.report_data_id = VI.victim_information_id
-#         JOIN stop_search_dev_db.public_relations PR
-#             ON RD.report_data_id = PR.public_relations_id
-#         JOIN stop_search_dev_db.report_media RM
-#             ON PR.public_relations_id = RM.report_media_id
-#         JOIN stop_search_dev_db.incident_address IA
-#             ON PR.public_relations_id = IA.incident_address_id
-#         JOIN stop_search_dev_db.map_coordinates MC
-#             ON IA.incident_address_id = MC.map_coordinates_id
-#         JOIN stop_search_dev_db.police_information PI
-#             ON RD.report_data_id = PI.police_information_id
-#         JOIN stop_search_dev_db.officer_information OI
-#             ON PI.police_information_id = OI.officer_information_id
-#     """
-#     with app.app_context():
-#         session = LocalSession()
-
-#         sql_query = select(
-#             ReportData.report_data_id,
-#             FormType.report_type,
-#             ReportDate.report_date,
-#             ReportDate.formatted_day,
-#             ReportDate.formatted_weekday,
-#             ReportDate.formatted_year,
-#             ReportDate.formatted_time,
-#             VictimInformation.number_of_victims,
-#             VictimInformation.victim_age,
-#             VictimInformation.victim_gender,
-#             VictimInformation.victim_race,
-#             PublicRelations.search_reason,
-#             PublicRelations.search_type,
-#             PublicRelations.additional_notes,
-#             ReportMedia.media_file_path,
-#             IncidentAddress.address_type,
-#             IncidentAddress.street_name,
-#             IncidentAddress.town_or_city,
-#             MapCoordinates.longitude,
-#             MapCoordinates.latitude,
-#             PoliceInformation.number_of_police,
-#             PoliceInformation.obtain_police_info,
-#             OfficerInformation.badge_number,
-#             OfficerInformation.officer_name,
-#             OfficerInformation.police_station
-#         ).join(
-#             ReportedBy, ReportData.report_data_id == ReportedBy.report_data_id
-#         ).join(
-#             FormType, ReportedBy.reported_by_id == FormType.reported_by_id  # Corrected
-#         ).join(
-#             ReportDate, ReportedBy.reported_by_id == ReportDate.reported_by_id  # Corrected
-#         ).join(
-#             VictimInformation, ReportData.report_data_id == VictimInformation.report_data_id
-#         ).join(
-#             PublicRelations, ReportData.report_data_id == PublicRelations.report_data_id  # Corrected
-#         ).join(
-#             ReportMedia, PublicRelations.public_relations_id == ReportMedia.public_relations_id  # Corrected
-#         ).join(
-#             IncidentAddress, PublicRelations.public_relations_id == IncidentAddress.public_relations_id  # Corrected
-#         ).join(
-#             MapCoordinates, IncidentAddress.incident_address_id == MapCoordinates.incident_address_id  # Corrected
-#         ).join(
-#             PoliceInformation, ReportData.report_data_id == PoliceInformation.report_data_id
-#         ).join(
-#             OfficerInformation, PoliceInformation.police_information_id == OfficerInformation.police_information_id
-#         )
-
-
-#         try:
-#             all_data = session.execute(sql_query).all()
-#             return all_data
-        
-#         except Exception as e:
-#             return {'SQL Error': e}
-
 
 def search_report_by_data_id(data_id: int):
-    """
-    SET @dataID = :report_data_id;
-    SELECT RD.report_data_id,
-           RT.form_type
-           RDate.report_date,
-           RDate.formatted_day,
-           RDate.formatted_weekday,
-           RDate.formatted_year,
-           RDate.formatted_time,
-           VI.number_of_victims,
-           VI.victim_age,
-           VI.victim_gender,
-           VI.victim_race,
-           PR.search_reason,
-           PR.search_type,
-           PR.additional_notes,
-           RM.media_file_path
-           IA.address_type,
-           IA.street_name,
-           IA.town_or_city,
-           MC.longitude,
-           MC.latitude,
-           PI.number_of_police,
-           PI.obtain_police_info,
-           OI.badge_number,
-           OI.officer_name,
-           OI.police_station
-    FROM stop_search_dev_db.report_data RD 
-        JOIN stop_search_dev_db.reported_by RB
-            ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.form_type RT
-            ON RB.reported_by_id = RD.report_type_id
-        JOIN stop_search_dev_db.report_date RDate
-            ON RB.reported_by_id = RDate.report_date_id
-        JOIN stop_search_dev_db.victim_information VI
-            ON RD.report_data_id = VI.victim_information_id
-        JOIN stop_search_dev_db.public_relations PR
-            ON RD.report_data_id = PR.public_relations_id
-        JOIN stop_search_dev_db.report_media RM
-            ON PR.public_relations_id = RM.report_media_id
-        JOIN stop_search_dev_db.incident_address IA
-            ON PR.public_relations_id = IA.incident_address_id
-        JOIN stop_search_dev_db.map_coordinates MC
-            ON IA.incident_address_id = MC.map_coordinates_id
-        JOIN stop_search_dev_db.police_information PI
-            ON RD.report_data_id = PI.police_information_id
-        JOIN stop_search_dev_db.officer_information OI
-            ON PI.police_information_id = OI.officer_information_id
-    WHERE RD.reported_by_id = @dataID;
-    """
     with app.app_context():
         session = LocalSession()
 
@@ -356,7 +87,7 @@ def search_report_by_data_id(data_id: int):
             FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
-            ReportDate.formatted_weekday,
+            ReportDate.formatted_week,
             ReportDate.formatted_year,
             ReportDate.formatted_time,
             VictimInformation.number_of_victims,
@@ -371,42 +102,42 @@ def search_report_by_data_id(data_id: int):
             IncidentAddress.street_name,
             IncidentAddress.town_or_city,
             MapCoordinates.longitude,
-            MapCoordinates.latitude,
+            MapCoordinates.lattitude,
             PoliceInformation.number_of_police,
             PoliceInformation.obtain_police_info,
             OfficerInformation.badge_number,
             OfficerInformation.officer_name,
             OfficerInformation.police_station
         ).join(
-            ReportedBy, ReportData.report_data_id==ReportedBy.report_data_id
+            ReportedBy, ReportData.report_data_id == ReportedBy.reported_by_id
         ).join(
-            FormType, ReportedBy.reported_by_id==FormType.form_type_id
+            FormType, ReportedBy.reported_by_id == FormType.form_type_id
         ).join(
-            ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
+            ReportDate, ReportedBy.reported_by_id == ReportDate.report_date_id
         ).join(
-            VictimInformation, ReportData.report_data_id==VictimInformation.report_data_id
+            VictimInformation, ReportData.report_data_id == VictimInformation.victim_information_id
         ).join(
-            PublicRelations, ReportData.report_data_id==PublicRelations.report_data_id
+            PublicRelations, ReportData.report_data_id == PublicRelations.public_relations_id
         ).join(
-            ReportMedia, PublicRelations.public_relations_id==ReportMedia.report_media_id
+            ReportMedia, PublicRelations.public_relations_id == ReportMedia.report_media_id
         ).join(
-            IncidentAddress, PublicRelations.public_relations_id==IncidentAddress.incident_address_id
+            IncidentAddress, PublicRelations.public_relations_id == IncidentAddress.incident_address_id
         ).join(
-            MapCoordinates, IncidentAddress.incident_address_id==MapCoordinates.map_coordinates_id
+            MapCoordinates, IncidentAddress.incident_address_id == MapCoordinates.map_coordinates_id
         ).join(
-            PoliceInformation, ReportData.report_data_id==PoliceInformation.report_data_id
+            PoliceInformation, ReportData.report_data_id == PoliceInformation.police_information_id
         ).join(
-            OfficerInformation, PoliceInformation.police_information_id==OfficerInformation.officer_information_id
+            OfficerInformation, PoliceInformation.police_information_id == OfficerInformation.officer_information_id
         ).where(
             ReportData.report_data_id == data_id
         )
 
         try:
-            data_by_id = session.execute(sql_query).first()
-            return data_by_id
+            all_data = session.execute(sql_query).all()
+            return all_data
         
         except Exception as e:
-            return {'SQL Error': e}
+            return {'SQL Error': str(e)}
 
 
 def search_all_reports_by_report_type(report_type: str):
@@ -521,56 +252,7 @@ def search_all_reports_by_report_type(report_type: str):
 
 
 def search_all_reports_by_last_30_days():
-    """
-    SELECT RD.report_data_id,
-           RT.report_type
-           RDate.report_date,
-           RDate.formatted_day,
-           RDate.formatted_weekday,
-           RDate.formatted_year,
-           RDate.formatted_time,
-           VI.number_of_victims,
-           VI.victim_age,
-           VI.victim_gender,
-           VI.victim_race,
-           PR.search_reason,
-           PR.search_type,
-           PR.additional_notes,
-           RM.media_file_path
-           IA.address_type,
-           IA.street_name,
-           IA.town_or_city,
-           MC.longitude,
-           MC.latitude,
-           PI.number_of_police,
-           PI.obtain_police_info,
-           OI.badge_number,
-           OI.officer_name,
-           OI.police_station
-    FROM stop_search_dev_db.report_data RD 
-        JOIN stop_search_dev_db.reported_by RB
-            ON RD.report_data_id = RB.reported_by_id
-        JOIN stop_search_dev_db.form_type RT
-            ON RB.reported_by_id = RD.report_type_id
-        JOIN stop_search_dev_db.report_date RDate
-            ON RB.reported_by_id = RDate.report_date_id
-        JOIN stop_search_dev_db.victim_information VI
-            ON RD.report_data_id = VI.victim_information_id
-        JOIN stop_search_dev_db.public_relations PR
-            ON RD.report_data_id = PR.public_relations_id
-        JOIN stop_search_dev_db.report_media RM
-            ON PR.public_relations_id = RM.report_media_id
-        JOIN stop_search_dev_db.incident_address IA
-            ON PR.public_relations_id = IA.incident_address_id
-        JOIN stop_search_dev_db.map_coordinates MC
-            ON IA.incident_address_id = MC.map_coordinates_id
-        JOIN stop_search_dev_db.police_information PI
-            ON RD.report_data_id = PI.police_information_id
-        JOIN stop_search_dev_db.officer_information OI
-            ON PI.police_information_id = OI.officer_information_id
-    WHERE (Rdate.formatted_date >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH))
-          AND (RDate.formatted_year = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)));
-    """
+
     with app.app_context():
         import datetime
 
@@ -591,7 +273,7 @@ def search_all_reports_by_last_30_days():
             FormType.report_type,
             ReportDate.report_date,
             ReportDate.formatted_day,
-            ReportDate.formatted_weekday,
+            ReportDate.formatted_week,
             ReportDate.formatted_year,
             ReportDate.formatted_time,
             VictimInformation.number_of_victims,
@@ -606,32 +288,32 @@ def search_all_reports_by_last_30_days():
             IncidentAddress.street_name,
             IncidentAddress.town_or_city,
             MapCoordinates.longitude,
-            MapCoordinates.latitude,
+            MapCoordinates.lattitude,
             PoliceInformation.number_of_police,
             PoliceInformation.obtain_police_info,
             OfficerInformation.badge_number,
             OfficerInformation.officer_name,
             OfficerInformation.police_station
         ).join(
-            ReportedBy, ReportData.report_data_id==ReportData.report_data_id
+            ReportedBy, ReportData.report_data_id == ReportedBy.reported_by_id
         ).join(
-            FormType, ReportedBy.reported_by_id==FormType.reported_by_id
+            FormType, ReportedBy.reported_by_id == FormType.form_type_id
         ).join(
-            ReportDate, ReportedBy.reported_by_id==ReportDate.report_date_id
+            ReportDate, ReportedBy.reported_by_id == ReportDate.report_date_id
         ).join(
-            VictimInformation, ReportData.report_data_id==VictimInformation.victim_information_id
+            VictimInformation, ReportData.report_data_id == VictimInformation.victim_information_id
         ).join(
-            PublicRelations, ReportData.report_data_id==PublicRelations.public_relations_id
+            PublicRelations, ReportData.report_data_id == PublicRelations.public_relations_id
         ).join(
-            ReportMedia, PublicRelations.public_relations_id==ReportMedia.report_media_id
+            ReportMedia, PublicRelations.public_relations_id == ReportMedia.report_media_id
         ).join(
-            IncidentAddress, PublicRelations.public_relations_id==IncidentAddress.incident_address_id
+            IncidentAddress, PublicRelations.public_relations_id == IncidentAddress.incident_address_id
         ).join(
-            MapCoordinates, IncidentAddress.incident_address_id==MapCoordinates.map_coordinates_id
+            MapCoordinates, IncidentAddress.incident_address_id == MapCoordinates.map_coordinates_id
         ).join(
-            PoliceInformation, ReportData.report_data_id==PoliceInformation.police_information_id
+            PoliceInformation, ReportData.report_data_id == PoliceInformation.police_information_id
         ).join(
-            OfficerInformation, PoliceInformation.police_information_id==OfficerInformation.officer_information_id
+            OfficerInformation, PoliceInformation.police_information_id == OfficerInformation.officer_information_id
         ).where(
             (ReportDate.formatted_year == year) &
             (ReportDate.report_date >= one_month_ago)

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="form-group">
+    <h1 style="color: red;">Report Data</h1>
+    <p style="color: blue;"><b>Data ID:</b></p>
+    <p>{{ data_id }}</p>
+    <p style="color: blue;"><b>Reported By:</b></p>
+    <p>{{ form_type }}</p>
+    <p style="color: blue;"><b>Date of Incident</b></p>
+    <p>{{ report_date }}</p>
+    <p style="color: blue;"><b>Time of Incident:</b></p>
+    <p>{{ formatted_time }}</p>
+</div>
+<div class="form-group">
+    <h3 style="color: red;"><b>Incident Location</b></h3>
+    <p style="color: blue;"><b>Street:</b></p>
+    <p>{{ street_name }}</p>
+    <p style="color: blue;"><b>Town or City</b></p>
+    <p>{{ town_or_city }}</p>
+    <p style="color: blue;"><b>Coordinates:</b></p>
+    <p>{{ incident_longitude }}, {{ incident_latitude }}</p>
+</div>
+<div class="form-group">
+    <h3 style="color: red;">Victim Information</h3>
+    <p style="color: blue;"><b>Number of Victims:</b></p>
+    <p>{{ number_of_victims }}</p>
+    <p style="color: blue;"><b>Age:</b></p>
+    <p>{{ victim_age }}</p>
+    <p style="color: blue;"><b>Gender:</b></p>
+    <p>{{ victim_gender }}</p>
+    <p style="color: blue;"><b>Race:</b></p>
+    <p>{{ victim_race }}</p>
+</div>
+<div class="form-group">
+    <h3 style="color: red;">Police Information</h3>
+    <p style="color: blue;"><b>Number of Visible Police:</b></p>
+    <p>{{ number_of_police }}</p>
+    <p style="color: blue;"><b>Reason For Search:</b></p>
+    <p>{{ search_reason }}</p>
+    <p style="color: blue;"><b>Type of Search:</b></p>
+    <p>{{ type_of_search }}</p>
+    <p style="color: blue;"><b>Get Police Details:</b></p>
+    <p>{{ get_police_details }}</p>
+</div>
+<div>
+    Click <a style="color: red;" href="http://localhost:8000/search/{{ data_id }}">here</a> to view the fill report.
+</div>
+
+{% endblock %}

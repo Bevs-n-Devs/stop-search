@@ -11,6 +11,9 @@ from werkzeug.utils import secure_filename
 @app.route("/submit_report", methods=["POST"])
 def submit_report():
     try:
+        # Initialize coordinate_address
+        coordinate_address = None
+
         # get data from form
         form_data = {
             "report_email" : request.form.get('report_email'),
@@ -38,22 +41,24 @@ def submit_report():
             return jsonify({'status': 'error', 'message': email_error}), 400
          
         # convert date
-        get_date = utils.convert_datetime_to_string_and_parse_object(form_date=form_data['form_date'])
+        # get_date = utils.convert_datetime_to_string_and_parse_object(form_date=form_data['form_date'])
 
         # get address & coordinates
         if form_data['address_type'] == "Manual Address":
             default_country = "United Kingdom"
             user_coordinates = geocoder.arcgis(location=f"{form_data['street_name']}, {form_data['town_or_city']}, {default_country}")
-            # map coordinates
-            map_latitude = user_coordinates.latlng[0]
-            map_longitude = user_coordinates.latlng[1]
-            form_data['map'] = []
-            form_data['map'].append({
-                "lattitude": map_latitude,
-                "longitude": map_longitude
-            }) 
-
-        if form_data['address_type'] == "Automatic Address":
+            
+            # map coordinates (if both is valid)
+            if user_coordinates.latlng[0] and user_coordinates.latlng[1]:
+                map_latitude = user_coordinates.latlng[0]
+                map_longitude = user_coordinates.latlng[1]
+                form_data['map'] = []
+                form_data['map'].append({
+                    "lattitude": str(map_latitude),
+                    "longitude": str(map_longitude)
+                }) 
+            
+        elif form_data['address_type'] == "Automatic Address":
             map_latitude = request.form.get('latitude')            
             map_longitude = request.form.get('longitude')
             # update form map & address
@@ -103,7 +108,10 @@ def submit_report():
 
         # handle media file upload
         if "media_files" in request.files:
-            media_files = request.files.getlist('media_files')
+            media_files = request.files.getlist('media_files') or ['--']
+
+            if media_files == ['--']:
+                form_data['media_files'] = '--'
 
             # Iterate through each file in the list of uploaded files
             for file in media_files:
@@ -121,7 +129,10 @@ def submit_report():
 
                 else:
                     return jsonify({'status': 'error', 'message': f'File type not allowed for {file.filename}'}), 400
-
+                
+        # handle if the media file is empty
+        if form_data['media_files'] == []:
+            form_data['media_files'] = '--'
 
         # add form data to database
         with app.app_context():
@@ -175,8 +186,8 @@ def submit_report():
 
             # add to MapCoordinates
             user_map_coordinates = report_service.create_new_map_coordinates(
-                lat=float(request.form.get('latitude')),
-                long=float(request.form.get('longitude')),
+                lat=float(request.form.get('latitude') or 0),
+                long=float(request.form.get('longitude') or 0),
                 new_incident_address_id=user_incident_address
             )
 
@@ -187,7 +198,13 @@ def submit_report():
                     user_report_media = report_service.create_new_report_media(
                         media_path=file,
                         new_public_id=user_public_relations
-                    ) 
+                    )
+            
+            if form_data['media_files'] == []:
+                user_report_media = report_service.create_new_report_media(
+                        media_path=form_data['media_files'],
+                        new_public_id=user_public_relations
+                    )
 
             # add to PoliceInformation
             user_police_info = report_service.create_new_police_information(
@@ -206,7 +223,7 @@ def submit_report():
                         police_station=officer['police_station'],
                         new_police_info_id=user_police_info
                     )
-        # TO DO: get data from database to display back to the user.
+        # TODO: get data from database to display back to the user.
         
         return jsonify({'status': 'success', 'message': 'Report submitted successfully'}, form_data, coordinate_address), 200
         
@@ -216,6 +233,3 @@ def submit_report():
         # Log the error
         app.logger.error(f"Error in /submit_report: {str(e)}")
         return jsonify({'status': 'error', 'message': 'Internal Server Error'}), 500
-    
-
-

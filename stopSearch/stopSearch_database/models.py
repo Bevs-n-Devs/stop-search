@@ -136,12 +136,12 @@ class OfficerInformation(Base):
 class MapCoordinates(Base):
     __tablename__ = 'map_coordinates'
     map_coordinates_id = Column(Integer, primary_key=True, autoincrement=True)
-    longitude = Column(Float, nullable=False)
-    lattitude = Column(Float, nullable=False)
+    longitude = Column(String(30), nullable=False)
+    lattitude = Column(String(30), nullable=False)
     incident_address_id = Column(Integer, ForeignKey('incident_address.incident_address_id'))
 
 class ReportMedia(Base):
     __tablename__ = 'report_media'
     report_media_id = Column(Integer, primary_key=True, autoincrement=True)
-    media_file_path = Column(String(150), nullable=True, unique=True)
+    media_file_path = Column(String(150), nullable=True, unique=False)
     public_relations_id = Column(Integer, ForeignKey('public_relations.public_relations_id'))

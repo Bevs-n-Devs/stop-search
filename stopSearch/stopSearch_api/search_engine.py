@@ -11,7 +11,7 @@ def search_all_reports() -> list[dict]:
     }
 
     with app.app_context():
-        get_all_reports = search_engine_service.temp_serach()
+        get_all_reports = search_engine_service.search_all_reports()
 
         for data in get_all_reports:
             result_data = {
@@ -62,44 +62,108 @@ def search_all_reports_by_data_id(data_id: int):
     }
 
     with app.app_context():
-        get_result = search_engine_service.search_report_by_data_id(data_id)
+        get_result = search_engine_service.search_report_by_data_id(data_id) # returns [list (tuple)]
 
         result_data = {
                 'ReportedBy': {
-                    'dataID': get_result[0],
-                    'reportType': get_result[1],
-                    'reportDate': get_result[2],
-                    'reportDay': get_result[3],
-                    'reportWeekday': get_result[4],
-                    'reportYear': get_result[5],
-                    'reportTime': get_result[6],
+                    'dataID': get_result[0][0],
+                    'reportType': get_result[0][1],
+                    'reportDate': get_result[0][2],
+                    'reportDay': get_result[0][3],
+                    'reportWeekday': get_result[0][4],
+                    'reportYear': get_result[0][5],
+                    'reportTime': get_result[0][6],
                 },
                 'VictimInformation': {
-                    'numberOfVictims': get_result[7],
-                    'victimAge': get_result[8],
-                    'victimGender': get_result[9],
-                    'victimRace': get_result[10],
+                    'numberOfVictims': get_result[0][7],
+                    'victimAge': get_result[0][8],
+                    'victimGender': get_result[0][9],
+                    'victimRace': get_result[0][10],
                 },
                 'PublicRelations': {
-                    'searchReason': get_result[11],
-                    'searchType': get_result[12],
-                    'additionalNotes': get_result[13],
-                    'reportMedia': get_result[14],
-                    'addressType': get_result[15],
-                    'streetName': get_result[16],
-                    'townCity': get_result[17],
-                    'lattitude': get_result[18],
-                    'longitude': get_result[19],
+                    'searchReason': get_result[0][11],
+                    'searchType': get_result[0][12],
+                    'additionalNotes': get_result[0][13],
+                    'reportMedia': get_result[0][14],
+                    'addressType': get_result[0][15],
+                    'streetName': get_result[0][16],
+                    'townCity': get_result[0][17],
+                    'lattitude': get_result[0][18],
+                    'longitude': get_result[0][19],
                 },
                 'PoliceInformation': {
-                    'numberOfPolice': get_result[20],
-                    'getPoliceInfo': get_result[21],
-                    'badgeNumber': get_result[22],
-                    'officerName': get_result[23],
-                    'policeStation': get_result[24]
+                    'numberOfPolice': get_result[0][20],
+                    'getPoliceInfo': get_result[0][21],
+                    'badgeNumber': get_result[0][22],
+                    'officerName': get_result[0][23],
+                    'policeStation': get_result[0][24]
                 }
             }
         
         results['Results'].append(result_data)
         
         return jsonify(results)
+    
+# TODO: get data from last 30 days
+@app.route('/search/30days')
+def search_reports_from_last_30_days():
+    results = {
+        'Results': []
+    }
+
+    with app.app_context():
+        get_result = search_engine_service.search_all_reports_by_last_30_days()
+
+        result_data = {
+                'ReportedBy': {
+                    'dataID': get_result[0][0],
+                    'reportType': get_result[0][1],
+                    'reportDate': get_result[0][2],
+                    'reportDay': get_result[0][3],
+                    'reportWeekday': get_result[0][4],
+                    'reportYear': get_result[0][5],
+                    'reportTime': get_result[0][6],
+                },
+                'VictimInformation': {
+                    'numberOfVictims': get_result[0][7],
+                    'victimAge': get_result[0][8],
+                    'victimGender': get_result[0][9],
+                    'victimRace': get_result[0][10],
+                },
+                'PublicRelations': {
+                    'searchReason': get_result[0][11],
+                    'searchType': get_result[0][12],
+                    'additionalNotes': get_result[0][13],
+                    'reportMedia': get_result[0][14],
+                    'addressType': get_result[0][15],
+                    'streetName': get_result[0][16],
+                    'townCity': get_result[0][17],
+                    'lattitude': get_result[0][18],
+                    'longitude': get_result[0][19],
+                },
+                'PoliceInformation': {
+                    'numberOfPolice': get_result[0][20],
+                    'getPoliceInfo': get_result[0][21],
+                    'badgeNumber': get_result[0][22],
+                    'officerName': get_result[0][23],
+                    'policeStation': get_result[0][24]
+                }
+            }
+        
+        results['Results'].append(result_data)
+        
+        return jsonify(results)
+
+# TODO: get data from last 60 days
+
+# TODO: get data from last 90 days
+
+# TODO: get data from last 6 months
+
+# TODO: get data from last 1 year
+
+# TODO: get data from specified year
+
+# TODO: dynamic seach route where params are submitted as SQL params for where clause
+
+
