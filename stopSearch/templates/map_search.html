@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+
+{% block title %}<h1>Map Search Engine</h1>{% endblock %}
+
+
+{% block header %}{% endblock %}
+
+{% block content %}
+
+<form action="{{ ('map_search_engine') }}" method="post">
+    <p>
+        Please select what type of report you are looking for. 
+        You can leave blank the filters you wish to ignore.
+    </p>
+<div class="form-group">
+    <h2 id="report_type">Report Type</h2>
+    <p>
+        <b>I am looking for a report for...</b>
+        <br>
+        <label for="victim">Victim</label>
+        <input type="radio" name="report_type" id="victim" value="victim">
+        <br>
+        <label for="witness">Witness</label>
+        <input type="radio" name="report_type" id="witness" value="witness">
+    </p>
+</div>
+<div class="form-group">
+    <h2 id="victim_information">Victim Information</h2>
+    <p>
+        <b>Find me a report where the number of victims are...</b>
+        <br>
+        <label id="unknown">Unknown</label>
+        <input type="radio" name="number_of_victims" id="unknown" value="Unknown">
+        <br>
+        <label id="1">1</label>
+        <input type="radio" name="number_of_victims" id="1" value="1">
+        <br>
+        <label id="2">2</label>
+        <input type="radio" name="number_of_victims" id="2" value="2">
+        <br>
+        <label id="3">3</label>
+        <input type="radio" name="number_of_victims" id="3" value="3">
+        <br>
+        <label id="4">4</label>
+        <input type="radio" name="number_of_victims" id="4" value="4">
+        <br>
+        <label id="5">5</label>
+        <input type="radio" name="number_of_victims" id="5" value="5">
+        <br>
+        <label id="6">6</label>
+        <input type="radio" name="number_of_victims" id="6" value="6">
+        <br>
+        <label id="7">7</label>
+        <input type="radio" name="number_of_victims" id="7" value="7">
+        <br>
+        <label id="8">8</label>
+        <input type="radio" name="number_of_victims" id="8" value="8">
+        <br>
+        <label id="9">9</label>
+        <input type="radio" name="number_of_victims" id="9" value="9">
+        <br>
+        <label id="10">10</label>
+        <input type="radio" name="number_of_victims" id="10" value="10">
+        <br>
+        <label id="10+">10+</label>
+        <input type="radio" name="number_of_victims" id="10+" value="10+">
+    </p>
+    <p>
+        <b>I want a report where the victim is aged between...</b>
+        <br>
+        <label id="unknown">Unknown</label>
+        <input type="radio" name="victim_information_age" id="unknown" value="unknown">
+        <br>
+        <label for="15-17">15 - 17</label>
+        <input type="radio" name="victim_information_age" id="15-17" value="15 - 17">
+        <br>
+        <label for="18-24">18 - 24</label>
+        <input type="radio" name="victim_information_age" id="18-24" value="18 - 24">
+        <br>
+        <label for="25-30">25 - 30</label>
+        <input type="radio" name="victim_information_age" id="25-30" value="25 - 30">
+        <br>
+        <label for="31-35">31 - 35</label>
+        <input type="radio" name="victim_information_age" id="31-35" value="31 - 35">
+        <br>
+        <label for="35+">35+</label>
+        <input type="radio" name="victim_information_age" id="35+" value="35+">
+        <br>
+        <label for="40+">40+</label>
+        <input type="radio" name="victim_information_age" id="40+" value="40+">
+        <br>
+        <label for="45+">45+</label>
+        <input type="radio" name="victim_information_age" id="45+" value="45+">
+        <br>
+        <label for="50+">50+</label>
+        <input type="radio" name="victim_information_age" id="50+">
+    </p>
+    <p>
+        <b>Find me a report where the victim's race is...</b>
+        <br>
+        <label id="unknown">Unknown</label>
+        <input type="radio" name="victim_information_race" id="unknown" value="Unknown">
+        <br>
+        <label id="Arab">Arab</label>
+        <input type="radio" name="victim_information_race" id="Arab" value="Arab">
+        <br>
+        <label id="Asian">Asian</label>
+        <input type="radio" name="victim_information_race" id="Asian" value="Asian">
+        <br>
+        <label id="Black">Black</label>
+        <input type="radio" name="victim_information_race" id="Black" value="Black">
+        <br>
+        <label id="Mixed Race">Mixed Race</label>
+        <input type="radio" name="victim_information_race" id="Mixed Race" value="Mixed Race">
+        <br>
+        <label id="5">White</label>
+        <input type="radio" name="victim_information_race" id="White" value="White">
+        <br>
+        <label id="6">Group of different races</label>
+        <input type="radio" name="victim_information_race" id="Group of different races" value="Group of different races">
+        <br>
+        <label id="Group of Arab people">Group of Arab people</label>
+        <input type="radio" name="victim_information_race" id="Group of Arab people" value="Group of Arab people">
+        <br>
+        <label id="Group of Asian people">Group of Asian people</label>
+        <input type="radio" name="victim_information_race" id="Group of Asian people" value="Group of Asian people">
+        <br>
+        <label id="Group of Black people">Group of Black people</label>
+        <input type="radio" name="victim_information_race" id="Group of Black people" value="Group of Black people">
+        <br>
+        <label id="Group of White people">Group of White people</label>
+        <input type="radio" name="victim_information_race" id="Group of White people" value="Group of White people">
+    </p>
+    <p>
+        <b>Find me a report where the victim's gender is...</b>
+        <br>
+        <label id="unknown">Unknown</label>
+        <input type="radio" name="victim_information_gender" id="unknown" value="Unknown">
+        <br>
+        <label id="Man">Man</label>
+        <input type="radio" name="victim_information_gender" id="Man" value="Man">
+        <br>
+        <label id="Woman">Woman</label>
+        <input type="radio" name="victim_information_gender" id="Woman" value="Woman">
+        <br>
+        <label id="Non-Binary">Non-Binary</label>
+        <input type="radio" name="victim_information_gender" id="Non-Binary" value="Non-Binary">
+        <br>
+        <label id="Trans">Trans</label>
+        <input type="radio" name="victim_information_gender" id="Trans" value="Trans">
+        <br>
+        <label id="Group of mixed genders">Group of mixed genders</label>
+        <input type="radio" name="victim_information_gender" id="Group of mixed genders" value="Group of mixed genders">
+        <br>
+        <label id="Group of men">Group of men</label>
+        <input type="radio" name="victim_information_gender" id="Group of men" value="Group of men">
+        <br>
+        <label id="Group of women">Group of women</label>
+        <input type="radio" name="victim_information_gender" id="Group of women" value="Group of women">
+        <br>
+        <label id="Group from LGBT community">Group from LGBT community</label>
+        <input type="radio" name="victim_information_gender" id="Group from LGBT community" value="Group from LGBT community">
+    </p>
+</div>
+<div class="form-group">
+    <h2 id="police_information">Police Information</h2>
+    <p>
+        <b>Find me a report where...</b>
+        <br>
+        <label for="get_police_info_yes">Information about the police officer is available</label>
+        <input type="radio" name="get_police_info" id="get_police_info_yes" value="yes">
+        <br>
+        <label for="get_police_info_no">Information about the police officer is <b>not</b> available</label>
+        <input type="radio" name="get_police_info" id="get_police_info_no" value="no">
+    </p>
+    <p>
+        <b>Find me a report where the number of police is between...</b>
+        <br>
+        <label id="unknown">Unknown</label>
+        <input type="radio" name="number_of_police" id="unknown" value="unknown">
+        <br>
+        <label for="1-2">1 - 2</label>
+        <input type="radio" name="number_of_police" id="1-2" value="1 - 2">
+        <br>
+        <label for="3-4">3 - 4</label>
+        <input type="radio" name="number_of_police" id="3-4" value="3 - 4">
+        <br>
+        <label for="5-6">5 - 6</label>
+        <input type="radio" name="number_of_police" id="5-6" value="5 - 6">
+        <br>
+        <label for="6+">6+</label>
+        <input type="radio" name="number_of_police" id="6+" value="6+">
+        <br>
+        <label for="10+">10+</label>
+        <input type="radio" name="number_of_police" id="10+" value="10+">
+        <br>
+        <label for="15+">15+</label>
+        <input type="radio" name="number_of_police" id="15+" value="15+">
+        <br>
+        <label for="20+">20+</label>
+        <input type="radio" name="20+" id="number_of_police" value="20+">
+    </p>
+    <p>
+        <b>Find me a report where the type of search was...</b> 
+        <br>
+        <label id="unknown">Unknown</label>
+        <input type="radio" name="type_of_search" id="unknown" value="unknown">
+        <br>
+        <label for="moderate">Moderate</label>
+        <input type="radio" name="type_of_search" id="moderate" value="Moderate">
+        <br>
+        <label for="aggressive">Aggressive</label>
+        <input type="radio" name="type_of_search" id="aggressive" value="Aggressive">
+    </p>
+    <p>
+        <b>Find me a report if the reason for the search was...</b>
+        <br>
+        <label id="unknown">Unknown</label>
+        <input type="radio" name="reason_for_search" id="unknown" value="unknown">
+        <br>
+        <label for="drugs">Suspicion of drugs</label>
+        <input type="radio" name="reason_for_search" id="drugs" value="Suspicion of drugs">
+        <br>
+        <label for="weapon">Carrying a weapon</label>
+        <input type="radio" name="reason_for_search" id="weapon" value="Carrying a weapon">
+        <br>
+        <label for="stolen">Stolen goods</label>
+        <input type="radio" name="reason_for_search" id="stolen" value="Stolen goods">
+        <br>
+        <label for="suspect">Suspicion of comitting a crime</label>
+        <input type="radio" name="reason_for_search" id="suspect" value="Suspicion of comitting a crime">
+        <br>
+        <label for="violent">Suspicion of comitting serious or violent crime</label>
+        <input type="radio" name="reason_for_search" id="violent" value="Suspicion of comitting serious or violent crime">
+        <br>
+        <label for="history">History of carrying or using a weapon in the past</label>
+        <input type="radio" name="reason_for_search" id="history" value="History of carrying or using a weapon in the past">
+        <br>
+        <label for="location">In a location where crime is high</label>
+        <input type="radio" name="reason_for_search" id="location" value="In a location where crime is high">
+    </p>
+</div>
+<div class="form-group">
+    <h2>Public Information</h2>
+    <p>
+        <b>Find me a report where the address type is...</b>
+        <br>
+        <label for="automatic">Automatic Address</label>
+        <input type="radio" name="address_type" id="automatic" value="Automatic Address">
+        <br>
+        <label for="manual">Manual Address</label>
+        <input type="radio" name="address_type" id="manual" value="Manual Address">
+    </p>
+    <p>
+        <b>Find me a report that happened on a...</b>
+        <br>
+        <label for="monday">Monday</label>
+        <input type="radio" name="report_weekday" id="monday" value="Mon">
+        <br>
+        <label for="tuesday">Tuesday</label>
+        <input type="radio" name="report_weekday" id="tuesday" value="Tue">
+        <br>
+        <label for="wednesday">Wednesday</label>
+        <input type="radio" name="report_weekday" id="wednesday" value="Wed">
+        <br>
+        <label for="thursday">Thursday</label>
+        <input type="radio" name="report_weekday" id="thursday" value="Thu">
+        <br>
+        <label for="friday">Friday</label>
+        <input type="radio" name="report_weekday" id="friday" value="Fri">
+        <br>
+        <label for="saturday">saturday</label>
+        <input type="radio" name="report_weekday" id="saturday" value="Sat">
+        <br>
+        <label for="sunday">Sunday</label>
+        <input type="radio" name="report_weekday" id="sunday" value="Sun">
+    </p>
+</div>
+<button type="submit">Find Report</button>
+</form>
+{% endblock %}
+
+
+

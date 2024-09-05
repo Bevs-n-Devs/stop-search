@@ -4,16 +4,67 @@ import requests
 from stopSearch import app
 from geopy.geocoders import Nominatim
 from dotenv import load_dotenv
-from flask import render_template
+from flask import render_template, request, jsonify, redirect, url_for
 load_dotenv()
 
-@app.route('/map')
-def map_page():
-    # make a request to the /map-data API
-    search_all_reports_api = f'http://localhost:{os.environ["API_PORT"]}/search/all'
-    map_data_response = requests.get(search_all_reports_api)
+@app.route('/map/searchEngine', methods=['GET', 'POST'])
+def map_search_engine():
+    if request.method == 'GET':
+        return render_template('map_search.html')
     
-    # check if the response is valid
+    if request.method == 'POST':
+        params = {
+            'report_type': request.form.get('report_type'),
+            'number_of_victims': request.form.get('number_of_victims'),
+            'victim_information_age': request.form.get('victim_information_age'),
+            'victim_information_race': request.form.get('victim_information_race'),
+            'victim_information_gender': request.form.get('victim_information_gender'),
+            'get_police_info': request.form.get('get_police_info'),
+            'number_of_police': request.form.get('number_of_police'),
+            'type_of_search': request.form.get('type_of_search'),
+            'reason_for_search': request.form.get('reason_for_search'),
+            'address_type': request.form.get('address_type'),
+            'report_weekday': request.form.get('report_weekday')
+        }
+
+        # Filter out empty parameters
+        filtered_params = {key: value for key, value in params.items() if value}
+
+        # Redirect to map/search with parameters as query string
+        return redirect(url_for('map_search', **filtered_params))
+
+
+# TODO: dynamic seach route where params are submitted as SQL params for where clause
+@app.route('/map')
+def map_search():
+    if request.method == 'GET':
+        # get SQL parameters from form
+        params = {
+            'report_type': request.form.get('report_type'),
+            'number_of_victims': request.form.get('number_of_victims'),
+            'victim_information_age': request.form.get('victim_information_age'),
+            'victim_information_race': request.form.get('victim_information_race'),
+            'victim_information_gender': request.form.get('victim_information_gender'),
+            'get_police_info': request.form.get('get_police_info'),
+            'number_of_police': request.form.get('number_of_police'),
+            'type_of_search': request.form.get('type_of_search'),
+            'reason_for_search': request.form.get('reason_for_search'),
+            'address_type': request.form.get('address_type'),
+            'report_weekday': request.form.get('report_weekday')
+        }
+
+        # filter out any parameters that are None or empty
+        filetered_params = {key: value for key, value in params.items() if value}        
+
+        # build a request to the search/report API dynamically
+        base_url = f'http://localhost:{os.environ["API_PORT"]}/search/report'
+        query_string = '&'.join([f'{key}={value}' for key, value in filetered_params.items()])
+        get_reports_from_bespoke_search_api = f'{base_url}?{query_string}'
+
+        # make the API request
+        map_data_response = requests.get(get_reports_from_bespoke_search_api)
+
+        # check if the response is valid
     if map_data_response.status_code == 200:
         # turn response into json object
         map_data = map_data_response.json()
@@ -43,8 +94,8 @@ def map_page():
                 report_date=data['ReportedBy']['reportDate'],
                 street_name=data['PublicRelations']['streetName'],
                 town_or_city=data['PublicRelations']['townCity'],
-                incident_longitude=data['PublicRelations']['lattitude'],  # Correct key
-                incident_latitude=data['PublicRelations']['longitude'],    # Correct key
+                incident_longitude=data['PublicRelations']['lattitude'],
+                incident_latitude=data['PublicRelations']['longitude'],  
                 victim_age=data['VictimInformation']['victimAge'],
                 victim_gender=data["VictimInformation"]['victimGender'],
                 victim_race=data["VictimInformation"]['victimRace'],
@@ -67,7 +118,8 @@ def map_page():
             icon=folium.Icon(color='blue', icon_color='red', icon='info', prefix='fa')
         ).add_to(map)
 
-    return map._repr_html_()
+    return render_template('map_search.html')
+
 
 
 @app.route('/map/<data_id>')
@@ -204,7 +256,4 @@ def map_via_30_days():
 # TODO: get data from last 1 year
 
 # TODO: get data from specified year
-
-# TODO: dynamic seach route where params are submitted as SQL params for where clause
-
 
