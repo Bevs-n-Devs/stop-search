@@ -465,4 +465,4 @@ def search_report():
             return jsonify(results)
         
     except Exception as e:
-        return jsonify({'Servuce Function Error': str(e)}), 500
+        return jsonify({'Service Function Error': str(e)}), 500

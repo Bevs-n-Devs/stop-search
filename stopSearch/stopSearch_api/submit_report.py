@@ -94,7 +94,7 @@ def submit_report():
             while True:
                 police_name = request.form.get(f"police_name_{officer_index}")
                 police_badge = request.form.get(f"police_badge_{officer_index}")
-                police_station = request.form.get(f"police_badge_{officer_index}")
+                police_station = request.form.get(f"police_station{officer_index}")
                 if not police_name and not police_badge and not police_station:
                     break
                 officers.append({

@@ -1650,32 +1650,59 @@ def search_all_reports_bespoke(**kwargs):
         )
 
         # dynamically apply SQL filters based on kwargs
-        if 'report_type' in kwargs:
-            sql_query = sql_query.where(FormType.report_type == kwargs['report_type'])
+        if 'reportType' in kwargs:
+            sql_query = sql_query.where(FormType.report_type == kwargs['reportType'])
 
-        if 'number_of_victims' in kwargs:
-            sql_query = sql_query.where(VictimInformation.number_of_victims == kwargs['number_of_victims'])
+        if 'victims' in kwargs:
+            sql_query = sql_query.where(VictimInformation.number_of_victims == kwargs['victims'])
 
-        if 'victim_age' in kwargs:
-            sql_query = sql_query.where(VictimInformation.victim_age == kwargs['victim_age'])
+        if 'victimAge' in kwargs:
+            sql_query = sql_query.where(VictimInformation.victim_age == kwargs['victimAge'])
 
-        if 'victim_gender' in kwargs:
-            sql_query = sql_query.where(VictimInformation.victim_gender == kwargs['victim_gender'])
+        if 'victimGender' in kwargs:
+            sql_query = sql_query.where(VictimInformation.victim_gender == kwargs['victimGender'])
 
-        if 'victim_race' in kwargs:
-            sql_query = sql_query.where(VictimInformation.victim_race == kwargs['victim_race'])
+        if 'victimRace' in kwargs:
+            sql_query = sql_query.where(VictimInformation.victim_race == kwargs['victimRace'])
 
-        if 'search_reason' in kwargs:
-            sql_query = sql_query.where(PublicRelations.search_reason == kwargs['search_reason'])
+        if 'searchReason' in kwargs:
+            sql_query = sql_query.where(PublicRelations.search_reason == kwargs['searchReason'])
 
-        if 'search_type' in kwargs:
-            sql_query = sql_query.where(PublicRelations.search_type == kwargs['search_type'])
+        if 'searchType' in kwargs:
+            sql_query = sql_query.where(PublicRelations.search_type == kwargs['searchType'])
 
-        if 'address_type' in kwargs:
-            sql_query = sql_query.where(IncidentAddress.address_type == kwargs['address_type'])
+        if 'addressType' in kwargs:
+            sql_query = sql_query.where(IncidentAddress.address_type == kwargs['addressType'])
 
-        if 'report_weekday' in kwargs:
-            sql_query = sql_query.where(ReportDate.formatted_day == kwargs['report_weekday'])
+        if 'reportWeekday' in kwargs:
+            sql_query = sql_query.where(ReportDate.formatted_day == kwargs['reportWeekday'])
+
+        # add extra filters 
+        if 'policeInfo' in kwargs:
+            sql_query = sql_query.where(PoliceInformation.obtain_police_info == kwargs['policeInfo'])
+
+        if 'badgeNumber' in kwargs:
+            sql_query = sql_query.where(OfficerInformation.badge_number.contains(kwargs['badgeNumber']))
+
+        if 'policeStation' in kwargs:
+            sql_query = sql_query.where(OfficerInformation.police_station.contains(kwargs['policeStation']))
+
+        if 'officerName' in kwargs:
+            sql_query = sql_query.where(OfficerInformation.officer_name.contains(kwargs['officerName']))
+        
+        if 'streetName' in kwargs:
+            sql_query = sql_query.where(IncidentAddress.street_name.contains(kwargs['streetName']))
+        
+        if 'townOrCity' in kwargs:
+            sql_query = sql_query.where(IncidentAddress.town_or_city.contains(kwargs['townOrCity']))
+        
+        if 'reportMonth' in kwargs:
+            sql_query = sql_query.where(ReportDate.formatted_month == kwargs['reportMonth'])
+
+        if 'reportTime' in kwargs:
+            sql_query = sql_query.where(ReportDate.formatted_time.contains(kwargs['reportTime'])) # in 24hr format (str)
+        
+
 
         try:
             bespoke_search = session.execute(sql_query).all()
