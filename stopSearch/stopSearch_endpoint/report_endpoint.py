@@ -142,15 +142,15 @@ def report_endpoint():
         question_14_option_9 = questions[1]["VictimInformation"][3]["select_options"][8]["option_9"]
         question_14_option_10 = questions[1]["VictimInformation"][3]["select_options"][9]["option_10"]
         question_14_option_11 = questions[1]["VictimInformation"][3]["select_options"][10]["option_11"]
-        question_14_option_13 = questions[1]["VictimInformation"][3]["select_options"][11]["option_12"]
-        question_14_option_14 = questions[1]["VictimInformation"][3]["select_options"][12]["option_13"]
-        question_14_option_15 = questions[1]["VictimInformation"][3]["select_options"][13]["option_14"]
-        question_14_option_16 = questions[1]["VictimInformation"][3]["select_options"][14]["option_15"]
-        question_14_option_17 = questions[1]["VictimInformation"][3]["select_options"][15]["option_16"]
-        question_14_option_18 = questions[1]["VictimInformation"][3]["select_options"][16]["option_17"]
-        question_14_option_19 = questions[1]["VictimInformation"][3]["select_options"][17]["option_18"]
-        question_14_option_20 = questions[1]["VictimInformation"][3]["select_options"][18]["option_19"]
-        question_14_option_21 = questions[1]["VictimInformation"][3]["select_options"][19]["option_20"]
+        question_14_option_12 = questions[1]["VictimInformation"][3]["select_options"][11]["option_12"]
+        question_14_option_13 = questions[1]["VictimInformation"][3]["select_options"][12]["option_13"]
+        question_14_option_14 = questions[1]["VictimInformation"][3]["select_options"][13]["option_14"]
+        question_14_option_15 = questions[1]["VictimInformation"][3]["select_options"][14]["option_15"]
+        question_14_option_16 = questions[1]["VictimInformation"][3]["select_options"][15]["option_16"]
+        question_14_option_17 = questions[1]["VictimInformation"][3]["select_options"][16]["option_17"]
+        question_14_option_18 = questions[1]["VictimInformation"][3]["select_options"][17]["option_18"]
+        question_14_option_19 = questions[1]["VictimInformation"][3]["select_options"][18]["option_19"]
+        question_14_option_20 = questions[1]["VictimInformation"][3]["select_options"][19]["option_20"]
         question_14_option_21 = questions[1]["VictimInformation"][3]["select_options"][20]["option_21"]
         question_14_option_22 = questions[1]["VictimInformation"][3]["select_options"][21]["option_22"]
         question_14_option_23 = questions[1]["VictimInformation"][3]["select_options"][22]["option_23"]
@@ -318,17 +318,38 @@ def report_endpoint():
             'question_14': {
                 'text': question_14,  # victim race
                 'options': {
-                    'option_1': question_14_option_1, 'option_2': question_14_option_2, 'option_3': question_14_option_3,
-                    'option_4': question_14_option_4, 'option_5': question_14_option_5, 'option_6': question_14_option_6,
-                    'option_7': question_14_option_7, 'option_8': question_14_option_8, 'option_9': question_14_option_9,
-                    'option_10': question_14_option_10, 'option_11': question_14_option_11, 'option_12': question_14_option_13,
-                    'option_13': question_14_option_14, 'option_14': question_14_option_15, 'option_15': question_14_option_16,
-                    'option_16': question_14_option_17, 'option_17': question_14_option_18, 'option_18': question_14_option_19,
-                    'option_19': question_14_option_20, 'option_20': question_14_option_21, 'option_21': question_14_option_22,
-                    'option_22': question_14_option_23, 'option_23': question_14_option_24, 'option_24': question_14_option_25,
-                    'option_25': question_14_option_26, 'option_26': question_14_option_27, 'option_27': question_14_option_28,
-                    'option_28': question_14_option_29, 'option_29': question_14_option_30, 'option_30': question_14_option_31,
-                    'option_31': question_14_option_32
+                    'option_1': (question_14_option_1, {'disabled': False}),
+                    'option_2': (question_14_option_2, {'disabled': True}), # Asian, Asian British or Asian Welsh
+                    'option_3': (question_14_option_3, {'disabled': False}),
+                    'option_4': (question_14_option_4, {'disabled': False}),
+                    'option_5': (question_14_option_5, {'disabled': False}),
+                    'option_6': (question_14_option_6, {'disabled': False}),
+                    'option_7': (question_14_option_7, {'disabled': False}),
+                    'option_8': (question_14_option_8, {'disabled': True}), # Black, Black British, Black Welsh, Caribbean or African
+                    'option_9': (question_14_option_9, {'disabled': False}),
+                    'option_10': (question_14_option_10, {'disabled': False}),
+                    'option_11': (question_14_option_11, {'disabled': False}),
+                    'option_12': (question_14_option_12, {'disabled': True}), # Mixed or Multiple ethnic groups
+                    'option_13': (question_14_option_13, {'disabled': False}),
+                    'option_14': (question_14_option_14, {'disabled': False}),
+                    'option_15': (question_14_option_15, {'disabled': False}),
+                    'option_16': (question_14_option_16, {'disabled': False}),
+                    'option_17': (question_14_option_17, {'disabled': True}), # White
+                    'option_18': (question_14_option_18, {'disabled': False}),
+                    'option_19': (question_14_option_19, {'disabled': False}),
+                    'option_20': (question_14_option_20, {'disabled': False}),
+                    'option_21': (question_14_option_21, {'disabled': False}),
+                    'option_22': (question_14_option_22, {'disabled': False}),
+                    'option_23': (question_14_option_23, {'disabled': True}), # Other ethnic group
+                    'option_24': (question_14_option_24, {'disabled': False}),
+                    'option_25': (question_14_option_25, {'disabled': False}),
+                    'option_26': (question_14_option_26, {'disabled': False}), # Groups of people
+                    'option_27': (question_14_option_27, {'disabled': False}),
+                    'option_28': (question_14_option_28, {'disabled': False}),
+                    'option_29': (question_14_option_29, {'disabled': False}),
+                    'option_30': (question_14_option_30, {'disabled': False}),
+                    'option_31': (question_14_option_31, {'disabled': False}),
+                    'option_32': (question_14_option_32, {'disabled': False}),
                 }
             },
             'question_15': {'text': question_15},  # additional notes

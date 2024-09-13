@@ -31,10 +31,10 @@
         </p>
         <p id="question5">
             {{ report_questions['question_5']['text'] }}
-            <b><label for="automaticAddress">{{ question_5_option_1 }}</label></b>
-            <input type="radio" name="address_type" id="automaticAddress" value="{{ question_5_option_1 }}" required>
-            <b><label for="manualAddress">{{ question_5_option_2 }}</label></b>
-            <input type="radio" name="address_type" id="manualAddress" value="{{ question_5_option_2 }}" required>
+            <b><label for="automaticAddress">{{ report_questions['question_5']['option_1'] }}</label></b>
+            <input type="radio" name="address_type" id="automaticAddress" value="{{ report_questions['question_5']['option_1'] }}" required>
+            <b><label for="manualAddress">{{ report_questions['question_5']['option_2'] }}</label></b>
+            <input type="radio" name="address_type" id="manualAddress" value="{{ report_questions['question_5']['option_2'] }}" required>
             <div id="userIncidentAddress">
                 <label for="streetName">Street Name:</label>
                 <input type="text" name="street_name" id="streetName" placeholder="door number, street name">
@@ -48,85 +48,41 @@
             <input type="hidden" name="longitude" id="longitude">
         </p>
         <p id="question6">
-            {{  question_6 }}
+            {{  report_questions['question_6']['text'] }}
             <select name="victims_involved" id="victimsInvolved" required>
                 <option value="">Please Select</option>
-                <option value="{{ question_6_option_1 }}">{{ question_6_option_1 }}</option>
-                <option value="{{ question_6_option_2 }}">{{ question_6_option_2 }}</option>
-                <option value="{{ question_6_option_3 }}">{{ question_6_option_3 }}</option>
-                <option value="{{ question_6_option_4 }}">{{ question_6_option_4 }}</option>
-                <option value="{{ question_6_option_5 }}">{{ question_6_option_5 }}</option>
-                <option value="{{ question_6_option_6 }}">{{ question_6_option_6 }}</option>
-                <option value="{{ question_6_option_7 }}">{{ question_6_option_7 }}</option>
-                <option value="{{ question_6_option_8 }}">{{ question_6_option_8 }}</option>
-                <option value="{{ question_6_option_9 }}">{{ question_6_option_9 }}</option>
-                <option value="{{ question_6_option_10 }}">{{ question_6_option_10 }}</option>
-                <option value="{{ question_6_option_11 }}">{{ question_6_option_11 }}</option>
-                <option value="{{ question_6_option_12 }}">{{ question_6_option_12 }}</option>
-                <option value="{{ question_6_option_13 }}">{{ question_6_option_13 }}</option>
+                {% for option_text in report_questions['question_6']['options'].values() %}
+                    <option value="{{ option_text }}">{{ option_text }}</option>
+                {% endfor %}
             </select>
         </p>
         <p id="question12">
-            {{ question_12 }}
+            {{ report_questions['question_12']['text'] }}
             <select name="victim_age" id="victimAge" required>
                 <option value="">Please Select</option>
-                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }} </option>
-                <option value="{{ question_12_option_2 }}">{{ question_12_option_2 }}</option>
-                <option value="{{ question_12_option_3 }}">{{ question_12_option_3 }}</option>
-                <option value="{{ question_12_option_4 }}">{{ question_12_option_4 }}</option>
-                <option value="{{ question_12_option_5 }}">{{ question_12_option_5 }}</option>
-                <option value="{{ question_12_option_6 }}">{{ question_12_option_6 }}</option>
-                <option value="{{ question_12_option_7 }}">{{ question_12_option_7 }}</option>
-                <option value="{{ question_12_option_8 }}">{{ question_12_option_8 }}</option>
-                <option value="{{ question_12_option_9 }}">{{ question_12_option_9 }}</option>
-                <option value="{{ question_12_option_10 }}">{{ question_12_option_10 }}</option>
-                <option value="{{ question_12_option_11 }}">{{ question_12_option_11 }}</option>
-                <option value="{{ question_12_option_12 }}">{{ question_12_option_12 }}</option>
-                <option value="{{ question_12_option_13 }}">{{ question_12_option_13 }}</option>
+                {% for option_text in report_questions['question_12']['options'].values() %}
+                    <option value="{{ option_text }}">{{ option_text }} </option>
+                {% endfor %}
             </select>
         </p>
         <p id="question13">
-          {{ question_13 }} 
+          {{ report_questions['question_13']['text'] }} 
           <select name="victim_gender" id="victimGender" required>
             <option value="">Please Select</option>
-            <option value="{{ question_13_option_1 }}">{{ question_13_option_1 }}</option>
-            <option value="{{ question_13_option_2 }}">{{ question_13_option_2 }}</option>
-            <option value="{{ question_13_option_3 }}">{{ question_13_option_3 }}</option>
-            <option value="{{ question_13_option_4 }}">{{ question_13_option_4 }}</option>
-            <option value="{{ question_13_option_5 }}">{{ question_13_option_5 }}</option>
-            <option value="{{ question_13_option_6 }}">{{ question_13_option_6 }}</option>
-            <option value="{{ question_13_option_7 }}">{{ question_13_option_7 }}</option>
-            <option value="{{ question_13_option_8 }}">{{ question_13_option_8 }}</option>
-            <option value="{{ question_13_option_9 }}">{{ question_13_option_9 }}</option>
+            {% for option_text in report_questions['question_13']['options'].values() %}
+                <option value="{{ option_text }}">{{ option_text }}</option>
+            {% endfor %}
           </select>
         </p>
         <p id="question14">
-            {{ question_14 }}
+            {{ report_questions['question_14']['text'] }}
             <select name="victim_race" id="victimRace" required>
                 <option value="">Please Select</option>
-                <option value="{{ question_14_option_1 }}">{{ question_14_option_1 }}</option>
-                <option disabled value="">Asian, Asian British or Asian Welsh</option>
-                <!-- <option disabled value="">{{ question_14_option_2 }}</option> -->
-                <option value="{{ question_14_option_3 }}">{{ question_14_option_3 }}</option>
-                <option value="{{ question_14_option_4 }}">{{ question_14_option_4 }}</option>
-                <option value="{{ question_14_option_5 }}">{{ question_14_option_5 }}</option>
-                <option value="{{ question_14_option_6 }}">{{ question_14_option_6 }}</option>
-                <!-- <option disabled value="">Black, Black British, Black Welsh, Caribbean or African</option> -->
-                <option value="{{ question_14_option_7 }}">{{ question_14_option_7 }}</option>
-                <option disabled value="">{{ question_14_option_8 }}</option>
-                <option value="{{ question_14_option_9 }}">{{ question_14_option_9 }}</option>
-                <option value="{{ question_14_option_10 }}">{{ question_14_option_10 }}</option>
-                <option value="{{ question_14_option_11 }}">{{ question_14_option_11 }}</option>
-                <!-- <option value="{{ question_14_option_12 }}">{{ question_14_option_12 }}</option> -->
-                <option disabled value="">{{ question_14_option_13 }}</option>
-                <option value="{{ question_14_option_14 }}">{{ question_14_option_14 }}</option>
-                <option value="{{ question_14_option_15 }}">{{ question_14_option_15 }}</option>
-                <option value="{{ question_14_option_16 }}">{{ question_14_option_16 }}</option>
-                <option value="{{ question_14_option_17 }}">{{ question_14_option_17 }}</option>
-                <option disabled value="">{{ question_14_option_18 }}</option>
-                <option value="{{ question_14_option_19 }}">{{ question_14_option_19 }}</option>
-                <option value="{{ question_14_option_20 }}">{{ question_14_option_20 }}</option>
-                <option value="{{ question_14_option_21 }}">{{ question_14_option_21 }}</option>
+                {% for option_text in report_questions['question_13']['options'].values() %}
+                    <option value="{{ option_text[0] }}" {% if option_text[1]['disabled'] %}disabled{% endif %} >
+                        {{ option_text[0] }}
+                    </option>
+                {% endfor %}
             </select>
         </p>
         <p id="question7">
