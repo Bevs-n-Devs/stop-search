@@ -12,21 +12,25 @@
 
     <div class="form-group">
 
-        <p id="question1">{{ question_1 }} <input type="email" name="report_email" id="reportEmail" placeholder="Type your email here..." required></p>
-        <p id="question2">{{ question_2 }} <input type="email" name="confirm_report_email" id="confirmReportEmail" placeholder="Re-type your email here..." required></p>
+        <p id="question1">{{ report_questions['question_1']['text'] }} <input type="email" name="report_email" id="reportEmail" placeholder="Type your email here..." required></p>
+        <p id="question2">{{ report_questions['question_2']['text'] }} <input type="email" name="confirm_report_email" id="confirmReportEmail" placeholder="Re-type your email here..." required></p>
         <p id="question3">
-            {{ question_3 }}
-            <b><label for="witness">{{ question_3_option_1 }}</label></b>
-            <input type="radio" name="form_type" id="witness" value="{{ question_3_option_1 }}" required>
-            <b><label for="victim">{{ question_3_option_2 }}</label></b>
-            <input type="radio" name="form_type" id="victim" value="{{ question_3_option_2 }}" required>
+            {{ report_questions['question_3']['text'] }}
+            {% for option_text in report_questions['question_3']['options'].values() %}
+            <div>
+                <label>
+                    <input type="radio" name="form_type" value="{{ option_text }}" required>
+                    <b>{{ option_text }}</b>
+                </label>
+            </div>
+            {% endfor %}
         </p>
         <p id="question4">
-            {{ question_4 }}
+            {{ report_questions['question_4']['text'] }}
             <input type="datetime-local" name="form_date" id="formDate" required>
         </p>
         <p id="question5">
-            {{ question_5 }}
+            {{ report_questions['question_5']['text'] }}
             <b><label for="automaticAddress">{{ question_5_option_1 }}</label></b>
             <input type="radio" name="address_type" id="automaticAddress" value="{{ question_5_option_1 }}" required>
             <b><label for="manualAddress">{{ question_5_option_2 }}</label></b>
@@ -59,6 +63,7 @@
                 <option value="{{ question_6_option_10 }}">{{ question_6_option_10 }}</option>
                 <option value="{{ question_6_option_11 }}">{{ question_6_option_11 }}</option>
                 <option value="{{ question_6_option_12 }}">{{ question_6_option_12 }}</option>
+                <option value="{{ question_6_option_13 }}">{{ question_6_option_13 }}</option>
             </select>
         </p>
         <p id="question12">
@@ -68,12 +73,16 @@
                 <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }} </option>
                 <option value="{{ question_12_option_2 }}">{{ question_12_option_2 }}</option>
                 <option value="{{ question_12_option_3 }}">{{ question_12_option_3 }}</option>
-                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }}</option>
-                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }}</option>
-                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }}</option>
-                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }}</option>
-                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }}</option>
-                <option value="{{ question_12_option_1 }}">{{ question_12_option_1 }}</option>
+                <option value="{{ question_12_option_4 }}">{{ question_12_option_4 }}</option>
+                <option value="{{ question_12_option_5 }}">{{ question_12_option_5 }}</option>
+                <option value="{{ question_12_option_6 }}">{{ question_12_option_6 }}</option>
+                <option value="{{ question_12_option_7 }}">{{ question_12_option_7 }}</option>
+                <option value="{{ question_12_option_8 }}">{{ question_12_option_8 }}</option>
+                <option value="{{ question_12_option_9 }}">{{ question_12_option_9 }}</option>
+                <option value="{{ question_12_option_10 }}">{{ question_12_option_10 }}</option>
+                <option value="{{ question_12_option_11 }}">{{ question_12_option_11 }}</option>
+                <option value="{{ question_12_option_12 }}">{{ question_12_option_12 }}</option>
+                <option value="{{ question_12_option_13 }}">{{ question_12_option_13 }}</option>
             </select>
         </p>
         <p id="question13">
@@ -96,15 +105,28 @@
             <select name="victim_race" id="victimRace" required>
                 <option value="">Please Select</option>
                 <option value="{{ question_14_option_1 }}">{{ question_14_option_1 }}</option>
-                <option value="{{ question_14_option_2 }}">{{ question_14_option_2 }}</option>
+                <option disabled value="">Asian, Asian British or Asian Welsh</option>
+                <!-- <option disabled value="">{{ question_14_option_2 }}</option> -->
                 <option value="{{ question_14_option_3 }}">{{ question_14_option_3 }}</option>
                 <option value="{{ question_14_option_4 }}">{{ question_14_option_4 }}</option>
                 <option value="{{ question_14_option_5 }}">{{ question_14_option_5 }}</option>
                 <option value="{{ question_14_option_6 }}">{{ question_14_option_6 }}</option>
+                <!-- <option disabled value="">Black, Black British, Black Welsh, Caribbean or African</option> -->
                 <option value="{{ question_14_option_7 }}">{{ question_14_option_7 }}</option>
-                <option value="{{ question_14_option_8 }}">{{ question_14_option_8 }}</option>
+                <option disabled value="">{{ question_14_option_8 }}</option>
                 <option value="{{ question_14_option_9 }}">{{ question_14_option_9 }}</option>
                 <option value="{{ question_14_option_10 }}">{{ question_14_option_10 }}</option>
+                <option value="{{ question_14_option_11 }}">{{ question_14_option_11 }}</option>
+                <!-- <option value="{{ question_14_option_12 }}">{{ question_14_option_12 }}</option> -->
+                <option disabled value="">{{ question_14_option_13 }}</option>
+                <option value="{{ question_14_option_14 }}">{{ question_14_option_14 }}</option>
+                <option value="{{ question_14_option_15 }}">{{ question_14_option_15 }}</option>
+                <option value="{{ question_14_option_16 }}">{{ question_14_option_16 }}</option>
+                <option value="{{ question_14_option_17 }}">{{ question_14_option_17 }}</option>
+                <option disabled value="">{{ question_14_option_18 }}</option>
+                <option value="{{ question_14_option_19 }}">{{ question_14_option_19 }}</option>
+                <option value="{{ question_14_option_20 }}">{{ question_14_option_20 }}</option>
+                <option value="{{ question_14_option_21 }}">{{ question_14_option_21 }}</option>
             </select>
         </p>
         <p id="question7">

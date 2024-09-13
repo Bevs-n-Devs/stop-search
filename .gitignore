@@ -6,3 +6,4 @@
 stop_search_dev_db.db
 /DEBUG
 stopSearch.egg-info
+**/database_scripts

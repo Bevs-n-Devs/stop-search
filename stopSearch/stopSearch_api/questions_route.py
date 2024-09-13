@@ -37,8 +37,10 @@ def questions_route() -> list[dict]:
     }
     questions["Questions"].append(police_information)
 
-
+    # get ALL questions from question service function
     all_questions = question_service.get_all_report_questions()
+
+    # TODO: add comments trhough out code explaing what is happening
 
     # question 1
     question_email = {
@@ -149,11 +151,15 @@ def questions_route() -> list[dict]:
 
     # question 10
     get_police_details = {
+        # get question from database
         f"question_{all_questions[9].question_id}": f"{all_questions[9].question_name}",
+        # create empty list to hold selections
         "select_options": [],
     }
+    # add the question to PoliceInformation question group
     questions["Questions"][3]["PoliceInformation"].append(get_police_details)
 
+    # append/add option to question option list 
     yes_no_options1 = {
         "option_1": "yes"
     }
@@ -223,5 +229,52 @@ def questions_route() -> list[dict]:
         f"question_{all_questions[15].question_id}": f"{all_questions[15].question_name}"
     }
     questions["Questions"][2]["PolicePublicRelations"].append(upload_media)
+
+    # question 17 - body camera
+    body_camera = {
+        f'question_{all_questions[16].question_id}': f'{all_questions[16].question_name}',
+        'select_options': []
+    }
+    # add the question to the PoliceInformation question group
+    questions['Questions'][3]['PoliceInformation'].append(body_camera)
+
+    # get options body camera question options from question service function
+    body_camera_options = question_service.get_body_camera_options()
+    # loop through the service function object to extract data
+    for item in body_camera_options:
+        question_body_camera_options = {
+            f'option_{item.question_body_cam_id}': f'{item.body_camera_options}'
+        }
+        # add question options to body_camera select_options list
+        body_camera['select_options'].append(question_body_camera_options)
+
+
+    # question 18 - search outcome
+    search_outcome = {
+        f'question_{all_questions[17].question_id}': f'{all_questions[17].question_name}',
+        'select_options': []
+    }
+    questions['Questions'][2]['PolicePublicRelations'].append(search_outcome)
+
+    search_outcome_options = question_service.get_search_outcome_options()
+    for item in search_outcome_options:
+        question_search_outcome_options = {
+            f'option_{item.question_search_outcome_id}': f'{item.search_outcome_options}'
+        }
+        search_outcome["select_options"].append(question_search_outcome_options)
+
+    # question 19 - officer interactions
+    officer_interaction = {
+        f'question_{all_questions[18].question_id}': f'{all_questions[18].question_name}',
+        'select_options': []
+    }
+    questions['Questions'][3]['PoliceInformation'].append(officer_interaction)
+
+    officer_interaction_options = question_service.get_officer_interaction_options()
+    for item in officer_interaction_options:
+        question_officer_interaction_options = {
+            f'option_{item.officer_interaction_id}': f'{item.officer_interaction_options}'
+        }
+        officer_interaction["select_options"].append(question_officer_interaction_options)
 
     return jsonify(status, app_data, app_pages, questions)

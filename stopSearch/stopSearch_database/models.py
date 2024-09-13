@@ -21,12 +21,12 @@ class QuestionLocationType(Base):
 class QuestionVictimsInvolved(Base):
     __tablename__ = 'question_victims_involved'
     question_victims_involved_id = Column(Integer, primary_key=True)
-    victims_involved_options = Column(String(8))
+    victims_involved_options = Column(String(20))
 
 class QuestionNumberOfPolice(Base):
     __tablename__ = 'question_number_of_police'
     question_number_of_police_id = Column(Integer, primary_key=True)
-    number_of_police_options = Column(String(8))
+    number_of_police_options = Column(String(20))
 
 class QuestionSearchReason(Base):
     __tablename__ = 'question_search_reason'
@@ -41,7 +41,7 @@ class QuestionSearchType(Base):
 class QuestionVictimAge(Base):
     __tablename__ = 'question_victim_age'
     question_victim_age_id = Column(Integer, primary_key=True)
-    victim_age_options = Column(String(8))
+    victim_age_options = Column(String(20))
 
 class QuestionVictimGender(Base):
     __tablename__ = 'question_victim_gender'
@@ -51,7 +51,26 @@ class QuestionVictimGender(Base):
 class QuestionVictimRace(Base):
     __tablename__ = 'question_victim_race'
     question_victim_race_id = Column(Integer, primary_key=True)
-    victim_race_options = Column(String(30))
+    victim_race_options = Column(String(75))
+
+# TODO: Add extra questions to database and update in answers tables
+#       i.e.  QuestionBodyCamera            ->     PoliceInformation
+#             QuestionSearchOutcome         ->     PublicRelations 
+#             QuestionOfficerInteractions   ->     OfficerInformation
+class QuestionBodyCamera(Base):
+    __tablename__ = 'question_body_camera'
+    question_body_cam_id = Column(Integer, primary_key=True)
+    body_camera_options = Column(String(10)) # Unknown, yes, no
+
+class QuestionSearchOutcome(Base):
+    __tablename__= 'question_search_outcome'
+    question_search_outcome_id = Column(Integer, primary_key=True)
+    search_outcome_options = Column(String(30))  # Unknown, No Further Action (NFA), Item Seized, Arrest, Warning or Caution Issued, Fixed Penalty Notice, Summons to Court, Community Resolution, Referral to Other Agencies
+
+class QuestionOfficerInteraction(Base):
+    __tablename__ = 'question_officer_interaction'
+    officer_interaction_id = Column(Integer, primary_key=True)
+    officer_interaction_options = Column(String(45))
 
 # answers
 class ReportData(Base):
@@ -85,6 +104,7 @@ class PublicRelations(Base):
     public_relations_id = Column(Integer, primary_key=True, autoincrement=True)
     search_reason = Column(String(55), nullable=False)
     search_type = Column(String(10), nullable=False)
+    search_outcome = Column(String(30), nullable=False) # Unknown, No Further Action (NFA), Item Seized, Arrest, Warning or Caution Issued, Fixed Penalty Notice, Summons to Court, Community Resolution, Referral to Other Agencies
     additional_notes = Column(Text, nullable=True)
     media = relationship('ReportMedia', backref='report_media_')
     address = relationship('IncidentAddress', backref='incident_address_')
@@ -95,6 +115,7 @@ class PoliceInformation(Base):
     police_information_id = Column(Integer, primary_key=True, autoincrement=True)
     number_of_police = Column(String(8), nullable=False)
     obtain_police_info = Column(String(3), nullable=False)
+    body_camera = Column(String(10), nullable=False) # Unknown / yes / no
     officers = relationship('OfficerInformation', backref='officer_information_')
     report_data_id = Column(Integer, ForeignKey('report_data.report_data_id'))
 
@@ -131,6 +152,7 @@ class OfficerInformation(Base):
     badge_number = Column(String(10), nullable=True)
     officer_name = Column(String(50), nullable=True)
     police_station = Column(String(50), nullable=True)
+    officer_interaction = Column(String(50), nullable=False)
     police_information_id = Column(Integer, ForeignKey('police_information.police_information_id'))
 
 class MapCoordinates(Base):

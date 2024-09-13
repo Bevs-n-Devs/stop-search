@@ -1657,50 +1657,97 @@ def search_all_reports_bespoke(**kwargs):
             sql_query = sql_query.where(VictimInformation.number_of_victims == kwargs['victims'])
 
         if 'victimAge' in kwargs:
+            # TODO: Create logic to process single int and convert to age range
+            #       16 ->  15 - 17, 12 -> 14 or Under, 27 -> 25 - 50 etc  (utility function)
             sql_query = sql_query.where(VictimInformation.victim_age == kwargs['victimAge'])
 
         if 'victimGender' in kwargs:
-            sql_query = sql_query.where(VictimInformation.victim_gender == kwargs['victimGender'])
+            sql_query = sql_query.where(or_(
+                VictimInformation.victim_gender == kwargs['victimGender'],
+                VictimInformation.victim_gender.contains(kwargs['victimGender'])
+            ))
 
         if 'victimRace' in kwargs:
-            sql_query = sql_query.where(VictimInformation.victim_race == kwargs['victimRace'])
+            # this will check if victimRace is exact exact macth or partial match.
+            sql_query = sql_query.where(or_(
+                VictimInformation.victim_race == kwargs['victimRace'],
+                VictimInformation.victim_race.contains(kwargs['victimRace'])
+            ))
 
         if 'searchReason' in kwargs:
-            sql_query = sql_query.where(PublicRelations.search_reason == kwargs['searchReason'])
+            sql_query = sql_query.where(or_(
+                PublicRelations.search_reason == kwargs['searchReason'],
+                PublicRelations.search_reason.contains(kwargs['searchReason'])
+            ))
 
         if 'searchType' in kwargs:
             sql_query = sql_query.where(PublicRelations.search_type == kwargs['searchType'])
 
         if 'addressType' in kwargs:
-            sql_query = sql_query.where(IncidentAddress.address_type == kwargs['addressType'])
+            sql_query = sql_query.where(or_(
+                IncidentAddress.address_type == kwargs['addressType'],
+                IncidentAddress.address_type.contains(kwargs['addressType'])
+            ))
 
         if 'reportWeekday' in kwargs:
-            sql_query = sql_query.where(ReportDate.formatted_day == kwargs['reportWeekday'])
+            sql_query = sql_query.where(or_(
+                ReportDate.formatted_week == kwargs['reportWeekday'],
+                ReportDate.formatted_week.contains(kwargs['reportWeekday'])
+            ))
 
         # add extra filters 
         if 'policeInfo' in kwargs:
-            sql_query = sql_query.where(PoliceInformation.obtain_police_info == kwargs['policeInfo'])
+            sql_query = sql_query.where(or_(
+                PoliceInformation.obtain_police_info == kwargs['policeInfo'],
+                PoliceInformation.obtain_police_info.contains(kwargs['policeInfo'])
+            ))
 
         if 'badgeNumber' in kwargs:
-            sql_query = sql_query.where(OfficerInformation.badge_number.contains(kwargs['badgeNumber']))
+            sql_query = sql_query.where(or_(
+                OfficerInformation.badge_number == kwargs['badgeNumber'],
+                OfficerInformation.badge_number.contains(kwargs['badgeNumber'])
+            ))
 
         if 'policeStation' in kwargs:
-            sql_query = sql_query.where(OfficerInformation.police_station.contains(kwargs['policeStation']))
+            sql_query = sql_query.where(or_(
+                OfficerInformation.police_station == kwargs['policeStation'],
+                OfficerInformation.police_station.contains(kwargs['policeStation'])
+            ))
 
         if 'officerName' in kwargs:
-            sql_query = sql_query.where(OfficerInformation.officer_name.contains(kwargs['officerName']))
+            sql_query = sql_query.where(or_(
+                OfficerInformation.officer_name == kwargs['officerName'],
+                OfficerInformation.officer_name.contains(kwargs['officerName'])
+            ))
         
         if 'streetName' in kwargs:
-            sql_query = sql_query.where(IncidentAddress.street_name.contains(kwargs['streetName']))
+            sql_query = sql_query.where(or_(
+                IncidentAddress.street_name == kwargs['streetName'],
+                IncidentAddress.street_name.contains(kwargs['streetName'])
+            ))
         
         if 'townOrCity' in kwargs:
-            sql_query = sql_query.where(IncidentAddress.town_or_city.contains(kwargs['townOrCity']))
+            sql_query = sql_query.where(or_(
+                IncidentAddress.town_or_city == kwargs['townOrCity'],
+                IncidentAddress.town_or_city.contains(kwargs['townOrCity'])
+            ))
         
         if 'reportMonth' in kwargs:
-            sql_query = sql_query.where(ReportDate.formatted_month == kwargs['reportMonth'])
+            # TODO: Create logic to convert int 1 - 12 to str Jan - Dec then use that variable to check
+            #       if equal to or contains logic below - utility fucntion
+            sql_query = sql_query.where(or_(
+                ReportDate.formatted_month == kwargs['reportMonth'],
+                ReportDate.formatted_month.contains(kwargs['reportMonth'])
+            ))
 
         if 'reportTime' in kwargs:
             sql_query = sql_query.where(ReportDate.formatted_time.contains(kwargs['reportTime'])) # in 24hr format (str)
+
+        if 'reportDate' in kwargs:
+            sql_query = sql_query.where(or_(
+                ReportDate.formatted_day == kwargs['reprotDate'],
+                ReportDate.formatted_day.contains(kwargs['reprotDate'])
+            ))
         
 
 

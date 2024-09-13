@@ -11,8 +11,14 @@ from stopSearch.stopSearch_database.models import (
     QuestionSearchType,
     QuestionVictimAge,
     QuestionVictimGender,
-    QuestionVictimRace
+    QuestionVictimRace,
+    QuestionBodyCamera, 
+    QuestionSearchOutcome,
+    QuestionOfficerInteraction
 )
+
+# we use the the questionID for the option number,
+# & the question name for the question value
 
 def get_all_report_questions() -> list[QuestionReportQuestions]:
     """
@@ -224,3 +230,66 @@ def get_victim_gender_options() -> list[QuestionVictimGender]:
         except Exception as e:
             return {"SQL Error": e}
         
+
+def get_body_camera_options() -> list[QuestionBodyCamera]:
+    """
+    Returns a list of body camera options (Uknown, yes, no) 
+
+    SELECT *
+    FROM stop_search_dev_db.question_body_camera;
+    """
+    with app.app_context():
+        session = LocalSession()
+
+        sql_query = select(
+            QuestionBodyCamera.question_body_cam_id,
+            QuestionBodyCamera.body_camera_options
+        )
+
+        try:
+            body_camera = session.execute(sql_query).all()
+            return body_camera
+        except Exception as e:
+            return {"SQL Error": e}
+
+def get_search_outcome_options() -> list[QuestionSearchOutcome]:
+    """
+    Returns a list of search outcomes.
+
+    SELECT *
+    FROM stop_search_dev_db.question_search_outcome;
+    """
+    with app.app_context():
+        session = LocalSession()
+
+        sql_query = select(
+            QuestionSearchOutcome.question_search_outcome_id,
+            QuestionSearchOutcome.search_outcome_options
+        )
+
+        try:
+            search_outcomes = session.execute(sql_query).all()
+            return search_outcomes
+        except Exception as e:
+            return {"SQL Error": e}
+
+def get_officer_interaction_options() -> list[QuestionOfficerInteraction]:
+    """
+    Returns a list of interactions.
+
+    SELECT *
+    FROM stop_search_dev_db.question_officer_interactions;
+    """
+    with app.app_context():
+        session = LocalSession()
+
+        sql_query = select(
+            QuestionOfficerInteraction.officer_interaction_id,
+            QuestionOfficerInteraction.officer_interaction_options
+        )
+
+        try:
+            officer_interaction = session.execute(sql_query).all()
+            return officer_interaction
+        except Exception as e:
+            return {"SQL Error": e}
