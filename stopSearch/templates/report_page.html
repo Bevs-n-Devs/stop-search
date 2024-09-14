@@ -31,10 +31,10 @@
         </p>
         <p id="question5">
             {{ report_questions['question_5']['text'] }}
-            <b><label for="automaticAddress">{{ report_questions['question_5']['option_1'] }}</label></b>
-            <input type="radio" name="address_type" id="automaticAddress" value="{{ report_questions['question_5']['option_1'] }}" required>
-            <b><label for="manualAddress">{{ report_questions['question_5']['option_2'] }}</label></b>
-            <input type="radio" name="address_type" id="manualAddress" value="{{ report_questions['question_5']['option_2'] }}" required>
+            <b><label for="automaticAddress">{{ report_questions['question_5']['options']['option_1'] }}</label></b>
+            <input type="radio" name="address_type" id="automaticAddress" value="{{ report_questions['question_5']['options']['option_1'] }}" required>
+            <b><label for="manualAddress">{{ report_questions['question_5']['options']['option_2'] }}</label></b>
+            <input type="radio" name="address_type" id="manualAddress" value="{{ report_questions['question_5']['options']['option_2'] }}" required>
             <div id="userIncidentAddress">
                 <label for="streetName">Street Name:</label>
                 <input type="text" name="street_name" id="streetName" placeholder="door number, street name">
@@ -78,7 +78,7 @@
             {{ report_questions['question_14']['text'] }}
             <select name="victim_race" id="victimRace" required>
                 <option value="">Please Select</option>
-                {% for option_text in report_questions['question_13']['options'].values() %}
+                {% for option_text in report_questions['question_14']['options'].values() %}
                     <option value="{{ option_text[0] }}" {% if option_text[1]['disabled'] %}disabled{% endif %} >
                         {{ option_text[0] }}
                     </option>
@@ -86,53 +86,69 @@
             </select>
         </p>
         <p id="question7">
-            {{ question_7 }}
+            {{ report_questions['question_7']['text'] }}
             <select name="number_of_police" id="numberOfPolice" required>
                 <option value="">Please Select</option>
-                <option value="{{ question_7_option_1 }}">{{ question_7_option_1 }}</option>
-                <option value="{{ question_7_option_2 }}">{{ question_7_option_2 }}</option>
-                <option value="{{ question_7_option_3 }}">{{ question_7_option_3 }}</option>
-                <option value="{{ question_7_option_4 }}">{{ question_7_option_4 }}</option>
-                <option value="{{ question_7_option_5 }}">{{ question_7_option_5 }}</option>
-                <option value="{{ question_7_option_6 }}">{{ question_7_option_6 }}</option>
-                <option value="{{ question_7_option_7 }}">{{ question_7_option_7 }}</option>
-                <option value="{{ question_7_option_8 }}">{{ question_7_option_8 }}</option>
+                {% for option_text in report_questions['question_7']['options'].values() %}
+                    <option value="{{ option_text }}">{{ option_text }}</option>
+                {% endfor %}
             </select>
         </p>
         <p id="question9">
-            {{  question_9 }}
-            <b><label for="unknown">{{ question_9_option_1 }}</label></b>
-            <input type="radio" name="search_type" id="unknown" value="{{ question_9_option_1 }}" required>
-            <b><label for="moderate">{{ question_9_option_2 }}</label></b>
-            <input type="radio" name="search_type" id="moderate" value="{{ question_9_option_2 }}" required>
-            <b><label for="aggressive">{{ question_9_option_3 }}</label></b>
-            <input type="radio" name="search_type" id="aggressive" value="{{ question_9_option_3 }}" required>
+            {{  report_questions['question_9']['text'] }}
+            {% for option_text in report_questions['question_9']['options'].values() %}
+            <div>
+                <label>
+                    <input type="radio" name="search_type" value="{{ option_text }}" required>
+                    <b>{{ option_text }}</b>
+                </label>
+            </div>
+            {% endfor %}
         </p>
         <p id="question8">
-            {{ question_8 }}
+            {{ report_questions['question_8']['text'] }}
             <select name="search_reason" id="searchReason" required>
                 <option value="">Please Select</option>
-                <option value="{{ question_8_option_1 }}">{{ question_8_option_1 }}</option>
-                <option disabled value="{{ question_8_option_2 }}">{{ question_8_option_2 }}</option>
-                <option value="{{ question_8_option_3 }}">{{ question_8_option_3 }}</option>
-                <option value="{{ question_8_option_4 }}">{{ question_8_option_4 }}</option>
-                <option value="{{ question_8_option_5 }}">{{ question_8_option_5 }}</option>
-                <option value="{{ question_8_option_6 }}">{{ question_8_option_6 }}</option>
-                <option disabled value="{{ question_8_option_7 }}">{{ question_8_option_7 }}</option>
-                <option value="{{ question_8_option_8 }}">{{ question_8_option_8 }}</option>
-                <option value="{{ question_8_option_9 }}">{{ question_8_option_9 }}</option>
+                {% for option_text in report_questions['question_8']['options'].values() %}
+                    <option value="{{ option_text[0] }}" {% if option_text[1]['disabled'] %}disabled{% endif %} >
+                        {{ option_text[0] }}
+                    </option>
+                {% endfor %}
+            </select>
+        </p>
+        <p id="question18">
+            {{ report_questions['question_18']['text'] }}
+            <select name="search_outcome" id="searchOutcome" required>
+                <option value="">Please Select</option>
+                {% for option_text in report_questions['question_18']['options'].values() %}
+                    <option value="{{ option_text }}">{{ option_text }}</option>
+                {% endfor %}
             </select>
         </p>
         <p id="question10">
-            {{  question_10 }}
-            <b><label for="noPoliceInfo">{{ question_10_option_2 }}</label></b>
-            <input type="radio" name="getPoliceInfo" id="noPoliceInfo" value="{{ question_10_option_2 }}" required>
-            <b><label for="obtainPoliceInfo">{{ question_10_option_1 }}</label></b>
-            <input type="radio" name="getPoliceInfo" id="obtainPoliceInfo" value="{{ question_10_option_1 }}" required>
+            {{  report_questions['question_10']['text'] }}
+            <div>
+                <input type="radio" name="getPoliceInfo" id="noPoliceInfo" value="{{ report_questions['question_10']['options']['option_2'] }}" required>
+                <b><label for="noPoliceInfo">{{ report_questions['question_10']['options']['option_2'] }}</label></b>
+                <br>
+                <input type="radio" name="getPoliceInfo" id="obtainPoliceInfo" value="{{ report_questions['question_10']['options']['option_1'] }}" required>
+                <b><label for="obtainPoliceInfo">{{ report_questions['question_10']['options']['option_1'] }}</label></b>
+            </div>
+            
         </p>
+        <p id="question17">
+            {{ report_questions['question_17']['text'] }}
+            {% for option_text in report_questions['question_17']['options'].values() %}
+            <div>
+                <label>    
+                    <input type="radio" name="body_camera" value="{{ option_text }}" required>
+                    <b>{{ option_text }}</b>
+                </label>
+            </div>
+            {% endfor %}
         <div id="officerContainer">
             <p id="question11">
-                {{ question_11 }}
+                {{ report_questions['question_11']['text'] }}
                 <br>
                 <input type="text" name="police_name_0" id="policeName" placeholder="Officer Name...">
                 <input type="text" name="police_badge_0" id="policeName" placeholder="Officer Badge Number...">
@@ -140,13 +156,24 @@
                 <button type="button" id="addOfficerButton">Add new Officer</button>
             </p>
         </div>
+        <p id="question19">
+            {{ report_questions['question_19']['text'] }}
+            {% for option_text in report_questions['question_19']['options'].values() %}
+            <div>
+                <label>    
+                    <input type="checkbox" name="police_intertaction" value="{{ option_text }}">
+                    <b>{{ option_text }}</b>
+                </label>
+            </div>
+            {% endfor %}
+        </p>
         <p id="question15">
-            {{ question_15 }}
+            {{ report_questions['question_15']['text'] }}
             <br>
             <textarea name="additional_notes" id="additionalNotes" cols="100" rows="10"></textarea>
         </p>
         <p id="question16">
-            {{ question_16 }}
+            {{ report_questions['question_16']['text'] }}
             <input type="file" name="media_files" accept="video/*,image/*" multiple>
         </p>
 

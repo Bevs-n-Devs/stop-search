@@ -53,11 +53,11 @@ def report_endpoint():
         # upload media files
         question_16 = questions[2]["PolicePublicRelations"][4]["question_16"]
         # body camnera worn
-        question_17 = questions[2]['PoliceInformation'][3]['question_17']
+        question_17 = questions[3]['PoliceInformation'][3]['question_17']
         # search outcome
         question_18 = questions[2]['PolicePublicRelations'][5]['question_18']
         # offcier interaction with the victim and or witness
-        question_19 = questions[2]['PoliceInformation'][3]['question_19']
+        question_19 = questions[3]['PoliceInformation'][4]['question_19']
 
         # question options
         question_3_option_1 = questions[0]["ReportedBy"][2]["select_options"][0]["option_1"]
@@ -165,9 +165,9 @@ def report_endpoint():
         question_14_option_32 = questions[1]["VictimInformation"][3]["select_options"][31]["option_32"]
 
         # body camera questions
-        question_17_option_1 = questions[1]['PoliceInformation'][3]['select_options'][0]['option_1']
-        question_17_option_2 = questions[1]['PoliceInformation'][3]['select_options'][1]['option_2']
-        question_17_option_3 = questions[1]['PoliceInformation'][3]['select_options'][2]['option_3']
+        question_17_option_1 = questions[3]['PoliceInformation'][3]['select_options'][0]['option_1']
+        question_17_option_2 = questions[3]['PoliceInformation'][3]['select_options'][1]['option_2']
+        question_17_option_3 = questions[3]['PoliceInformation'][3]['select_options'][2]['option_3']
 
         # search outcome questions
         question_18_option_1 = questions[2]['PolicePublicRelations'][5]['select_options'][0]['option_1']
@@ -181,45 +181,44 @@ def report_endpoint():
         question_18_option_9 = questions[2]['PolicePublicRelations'][5]['select_options'][8]['option_9']
 
         # officer interaction questions
-        question_19_option_1 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_1']
-        question_19_option_2 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_2']
-        question_19_option_3 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_3']
-        question_19_option_4 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_4']
-        question_19_option_5 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_5']
-        question_19_option_6 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_6']
-        question_19_option_7 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_7']
-        question_19_option_8 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_8']
-        question_19_option_9 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_9']
-        question_19_option_10 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_10']
-        question_19_option_11 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_11']
-        question_19_option_12 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_12']
-        question_19_option_13 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_13']
-        question_19_option_14 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_14']
-        question_19_option_15 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_15']
-        question_19_option_16 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_16']
-        question_19_option_17 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_17']
-        question_19_option_18 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_18']
-        question_19_option_19 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_19']
-        question_19_option_20 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_20']
-        question_19_option_21 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_21']
-        question_19_option_22 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_22']
-        question_19_option_23 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_23']
-        question_19_option_24 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_24']
-        question_19_option_25 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_25']
-        question_19_option_26 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_26']
-        question_19_option_27 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_27']
-        question_19_option_28 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_28']
-        question_19_option_29 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_29']
-        question_19_option_30 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_30']
-        question_19_option_31 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_31']
-        question_19_option_32 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_32']
-        question_19_option_33 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_33']
-        question_19_option_34 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_34']
-        question_19_option_35 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_35']
-        question_19_option_36 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_36']
-        question_19_option_37 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_37']
-        question_19_option_38 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_38']
-        question_19_option_39 = questions[2]['PoliceInformation'][3]['select_options'][0]['option_39']
+        question_19_option_1 = questions[3]['PoliceInformation'][4]['select_options'][0]['option_1']
+        question_19_option_2 = questions[3]['PoliceInformation'][4]['select_options'][1]['option_2']
+        question_19_option_3 = questions[3]['PoliceInformation'][4]['select_options'][2]['option_3']
+        question_19_option_4 = questions[3]['PoliceInformation'][4]['select_options'][3]['option_4']
+        question_19_option_5 = questions[3]['PoliceInformation'][4]['select_options'][4]['option_5']
+        question_19_option_6 = questions[3]['PoliceInformation'][4]['select_options'][5]['option_6']
+        question_19_option_7 = questions[3]['PoliceInformation'][4]['select_options'][6]['option_7']
+        question_19_option_8 = questions[3]['PoliceInformation'][4]['select_options'][7]['option_8']
+        question_19_option_9 = questions[3]['PoliceInformation'][4]['select_options'][8]['option_9']
+        question_19_option_10 = questions[3]['PoliceInformation'][4]['select_options'][9]['option_10']
+        question_19_option_11 = questions[3]['PoliceInformation'][4]['select_options'][10]['option_11']
+        question_19_option_12 = questions[3]['PoliceInformation'][4]['select_options'][11]['option_12']
+        question_19_option_13 = questions[3]['PoliceInformation'][4]['select_options'][12]['option_13']
+        question_19_option_14 = questions[3]['PoliceInformation'][4]['select_options'][13]['option_14']
+        question_19_option_15 = questions[3]['PoliceInformation'][4]['select_options'][14]['option_15']
+        question_19_option_16 = questions[3]['PoliceInformation'][4]['select_options'][15]['option_16']
+        question_19_option_17 = questions[3]['PoliceInformation'][4]['select_options'][16]['option_17']
+        question_19_option_18 = questions[3]['PoliceInformation'][4]['select_options'][17]['option_18']
+        question_19_option_19 = questions[3]['PoliceInformation'][4]['select_options'][18]['option_19']
+        question_19_option_20 = questions[3]['PoliceInformation'][4]['select_options'][19]['option_20']
+        question_19_option_21 = questions[3]['PoliceInformation'][4]['select_options'][20]['option_21']
+        question_19_option_22 = questions[3]['PoliceInformation'][4]['select_options'][21]['option_22']
+        question_19_option_23 = questions[3]['PoliceInformation'][4]['select_options'][22]['option_23']
+        question_19_option_24 = questions[3]['PoliceInformation'][4]['select_options'][23]['option_24']
+        question_19_option_25 = questions[3]['PoliceInformation'][4]['select_options'][24]['option_25']
+        question_19_option_26 = questions[3]['PoliceInformation'][4]['select_options'][25]['option_26']
+        question_19_option_27 = questions[3]['PoliceInformation'][4]['select_options'][26]['option_27']
+        question_19_option_28 = questions[3]['PoliceInformation'][4]['select_options'][27]['option_28']
+        question_19_option_29 = questions[3]['PoliceInformation'][4]['select_options'][28]['option_29']
+        question_19_option_30 = questions[3]['PoliceInformation'][4]['select_options'][29]['option_30']
+        question_19_option_31 = questions[3]['PoliceInformation'][4]['select_options'][30]['option_31']
+        question_19_option_32 = questions[3]['PoliceInformation'][4]['select_options'][31]['option_32']
+        question_19_option_33 = questions[3]['PoliceInformation'][4]['select_options'][32]['option_33']
+        question_19_option_34 = questions[3]['PoliceInformation'][4]['select_options'][33]['option_34']
+        question_19_option_35 = questions[3]['PoliceInformation'][4]['select_options'][34]['option_35']
+        question_19_option_36 = questions[3]['PoliceInformation'][4]['select_options'][35]['option_36']
+        question_19_option_37 = questions[3]['PoliceInformation'][4]['select_options'][36]['option_37']
+        question_19_option_38 = questions[3]['PoliceInformation'][4]['select_options'][37]['option_38']
 
 
         """
@@ -282,10 +281,16 @@ def report_endpoint():
             'question_8': {
                 'text': question_8,  # reason for stop
                 'options': {
-                    'option_1': question_8_option_1, 'option_2': question_8_option_2, 'option_3': question_8_option_3,
-                    'option_4': question_8_option_4, 'option_5': question_8_option_5, 'option_6': question_8_option_6,
-                    'option_7': question_8_option_7, 'option_8': question_8_option_8, 'option_9': question_8_option_9,
-                    'option_10': question_8_option_10
+                    'option_1': (question_8_option_1, {'disabled': False}), 
+                    'option_2': (question_8_option_2, {'disabled': True}), 
+                    'option_3': (question_8_option_3, {'disabled': False}),
+                    'option_4': (question_8_option_4, {'disabled': False}), 
+                    'option_5': (question_8_option_5, {'disabled': False}), 
+                    'option_6': (question_8_option_6, {'disabled': False}),
+                    'option_7': (question_8_option_7, {'disabled': True}), 
+                    'option_8': (question_8_option_8, {'disabled': False}), 
+                    'option_9': (question_8_option_9, {'disabled': False}),
+                    'option_10': (question_8_option_10, {'disabled': False})
                 }
             },
             'question_9': {
@@ -369,17 +374,44 @@ def report_endpoint():
             'question_19': {
                 'text': question_19,  # officer interaction with the victim/witness
                 'options': {
-                    'option_1': question_19_option_1, 'option_2': question_19_option_2, 'option_3': question_19_option_3,
-                    'option_4': question_19_option_4, 'option_5': question_19_option_5, 'option_6': question_19_option_6,
-                    'option_7': question_19_option_7, 'option_8': question_19_option_8, 'option_9': question_19_option_9,
-                    'option_10': question_19_option_10, 'option_11': question_19_option_11, 'option_12': question_19_option_12,
-                    'option_13': question_19_option_13, 'option_14': question_19_option_14, 'option_15': question_19_option_15,
-                    'option_16': question_19_option_16, 'option_17': question_19_option_17, 'option_18': question_19_option_18,
-                    'option_19': question_19_option_19, 'option_20': question_19_option_20, 'option_21': question_19_option_21,
-                    'option_22': question_19_option_22, 'option_23': question_19_option_23, 'option_24': question_19_option_24,
-                    'option_25': question_19_option_25, 'option_26': question_19_option_26, 'option_27': question_19_option_27,
-                    'option_28': question_19_option_28, 'option_29': question_19_option_29, 'option_30': question_19_option_30,
-                    'option_31': question_19_option_31
+                    'option_1': question_19_option_1, 
+                    'option_2': question_19_option_2, 
+                    'option_3': question_19_option_3,
+                    'option_4': question_19_option_4, 
+                    'option_5': question_19_option_5, 
+                    'option_6': question_19_option_6,
+                    'option_7': question_19_option_7, 
+                    'option_8': question_19_option_8, 
+                    'option_9': question_19_option_9,
+                    'option_10': question_19_option_10, 
+                    'option_11': question_19_option_11, 
+                    'option_12': question_19_option_12,
+                    'option_13': question_19_option_13, 
+                    'option_14': question_19_option_14, 
+                    'option_15': question_19_option_15,
+                    'option_16': question_19_option_16, 
+                    'option_17': question_19_option_17, 
+                    'option_18': question_19_option_18,
+                    'option_19': question_19_option_19, 
+                    'option_20': question_19_option_20, 
+                    'option_21': question_19_option_21,
+                    'option_22': question_19_option_22, 
+                    'option_23': question_19_option_23, 
+                    'option_24': question_19_option_24,
+                    'option_25': question_19_option_25, 
+                    'option_26': question_19_option_26, 
+                    'option_27': question_19_option_27,
+                    'option_28': question_19_option_28, 
+                    'option_29': question_19_option_29, 
+                    'option_30': question_19_option_30,
+                    'option_31': question_19_option_31,
+                    'option_32': question_19_option_32,
+                    'option_33': question_19_option_33,
+                    'option_34': question_19_option_34,
+                    'option_35': question_19_option_35,
+                    'option_36': question_19_option_36,
+                    'option_37': question_19_option_37,
+                    'option_38': question_19_option_38,
                 }
             }
         }
