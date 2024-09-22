@@ -763,7 +763,7 @@ def search_all_reports_bespoke(**kwargs):
             PoliceInformation.body_camera,                      # 21
             OfficerInformation.badge_number,                    # 22
             OfficerInformation.officer_name,                    # 23
-            OfficerInformation.police_station                   # 24
+            OfficerInformation.police_station                  # 24
         ).join(
             ReportedBy, ReportData.report_data_id == ReportedBy.report_data_id
         ).join(

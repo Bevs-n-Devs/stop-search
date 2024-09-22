@@ -118,6 +118,8 @@ def map_search():
                 search_type=data["ReportData"][2]['PublicRelations']['searchType'],
                 search_reason=data["ReportData"][2]['PublicRelations']['searchReason'],
                 search_outcome=data["ReportData"][2]['PublicRelations']['searchOutcome'],
+                additional_notes=data["ReportData"][2]['PublicRelations']['additionalNotes'],
+                report_media=data["ReportData"][2]['PublicRelations']['reportMedia'],
                 
                 get_police_info=data['ReportData'][3]['PoliceInformation']['getPoliceInfo'],
                 number_of_police=data["ReportData"][3]['PoliceInformation']['numberOfPolice'],
