@@ -34,13 +34,6 @@ def init_db():
 
     # Create default questions if it doesn't exist
 
-    # TODO:   1. Run the following scripts AFTER the app is run to create the correct questions
-    #       - UPDATE and INSERT victim race selections.sql
-    #       - UPDATE and remove user option duplicates.sql
-    #       - Create NEW victim age options.sql
-
-    # TODO:   2. Update the questions below so there is no need for step 1 above.
-
     # TODO:   3. Write comments, what is going on? How do we populate the questions?
     
     from stopSearch.stopSearch_database.models import (

@@ -115,6 +115,7 @@ def create_new_report_date(get_date: str, new_report_by_id: ReportedBy) -> list[
                 formatted_month = str(date_list_object[0][1]),
                 formatted_year = str(date_list_object[0][4]),
                 formatted_time = str(date_list_object[0][3]),
+                time_stamp = str(get_date),                     # record the orginal date as timestamp - will be needed later on for CCTV API 
                 form_date_ = new_report_by_id
             )
 
@@ -158,7 +159,7 @@ def create_new_victim_information(num_victims: str, victim_age: str, victim_gend
             session.close()
         
 
-def create_new_public_relations(search_reason: str, search_type: str, report_notes: str, new_report_data_id: ReportData) -> list[PublicRelations]:
+def create_new_public_relations(search_reason: str, search_outcome: str, search_type: str, report_notes: str, new_report_data_id: ReportData) -> list[PublicRelations]:
     """
     This collects interactions between the police and the public, storing it in PublicRelations table.
     Table linked to ReportData via foreign key.
@@ -170,6 +171,7 @@ def create_new_public_relations(search_reason: str, search_type: str, report_not
             session = LocalSession()
             new_public_relations = PublicRelations(
                 search_reason = search_reason,
+                search_outcome = search_outcome,
                 search_type = search_type,
                 additional_notes = report_notes,
                 public_relations_ = new_report_data_id
@@ -241,7 +243,7 @@ def create_new_map_coordinates(lat: float, long: float, new_incident_address_id:
             session.close()
 
 
-def create_new_police_information(num_police: str, get_police_info: str, new_report_data_id: ReportData) -> list[PoliceInformation]:
+def create_new_police_information(num_police: str, get_police_info: str, body_camera: str, new_report_data_id: ReportData) -> list[PoliceInformation]:
     """
     Records the actions of the police at the scene into PoliceInformation table.
     Table linked to ReportData via foreign key.
@@ -254,6 +256,7 @@ def create_new_police_information(num_police: str, get_police_info: str, new_rep
             new_police_info = PoliceInformation(
                 number_of_police = num_police,
                 obtain_police_info = get_police_info,
+                body_camera = body_camera,
                 police_information_ = new_report_data_id
             )
 
@@ -266,6 +269,32 @@ def create_new_police_information(num_police: str, get_police_info: str, new_rep
             return {'SQL Error': e}
         finally:
             session.close()
+            
+
+# def create_new_police_actions(police_interaction: str, new_police_info_id: PoliceInformation) -> list[PoliceActions]:
+#     """
+#     Records any police officer's actions between the officer and the victim and/or the witness.
+#     Table linked to PoliceInformation via foreign key.
+
+#     Returns PoliceActions object.
+#     """
+#     with app.app_context():
+#         try:
+#             session = LocalSession()
+#             new_police_actions = PoliceActions(
+#                 police_interaction = police_interaction,
+#                 police_actions_ = new_police_info_id
+#             )
+            
+#             session.add(new_police_actions)
+#             session.commit()
+            
+#             return new_police_actions
+        
+#         except Exception as e:
+#             return {'SQL Error': e}
+#         finally:
+#             session.close()
 
 
 def create_new_officer_information(badge_num: str, police_name: str, police_station: str, new_police_info_id: PoliceInformation) -> list[OfficerInformation]:

@@ -156,17 +156,6 @@
                 <button type="button" id="addOfficerButton">Add new Officer</button>
             </p>
         </div>
-        <p id="question19">
-            {{ report_questions['question_19']['text'] }}
-            {% for option_text in report_questions['question_19']['options'].values() %}
-            <div>
-                <label>    
-                    <input type="checkbox" name="police_intertaction" value="{{ option_text }}">
-                    <b>{{ option_text }}</b>
-                </label>
-            </div>
-            {% endfor %}
-        </p>
         <p id="question15">
             {{ report_questions['question_15']['text'] }}
             <br>

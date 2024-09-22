@@ -13,7 +13,7 @@ def submit_report():
     try:
         # Initialize coordinate_address
         coordinate_address = None
-
+        
         # get data from form
         form_data = {
             "report_email" : request.form.get('report_email'),
@@ -32,6 +32,9 @@ def submit_report():
             "search_reason" : request.form.get('search_reason'),
             "get_police_info" : request.form.get('getPoliceInfo'),
             "additional_notes" : request.form.get('additional_notes'),
+            "body_camera": request.form.get('body_camera'),
+            "search_outcome": request.form.get('search_outcome'),
+            "police_intertaction": request.form.getlist('police_intertaction'),
             "media_files": []
         }
 
@@ -104,7 +107,7 @@ def submit_report():
                 })
                 officer_index += 1
             form_data['police_officers'] = officers
-
+        
 
         # handle media file upload
         if "media_files" in request.files:
@@ -171,6 +174,7 @@ def submit_report():
             # add to PublicRelations
             user_public_relations = report_service.create_new_public_relations(
                 search_reason=form_data['search_reason'],
+                search_outcome=form_data['search_outcome'],
                 search_type=form_data['search_type'],
                 report_notes=form_data['additional_notes'],
                 new_report_data_id=user_data
@@ -210,8 +214,24 @@ def submit_report():
             user_police_info = report_service.create_new_police_information(
                 num_police=form_data['number_of_police'],
                 get_police_info=form_data['get_police_info'],
+                body_camera=form_data['body_camera'],
                 new_report_data_id=user_data
             )
+            
+            # add to PoliceActions
+            # extract data from list - request.form.getlist('police_interactions')
+            # if form_data['police_intertaction']:
+            #     for data in form_data['police_intertaction']:
+            #         user_police_actions = report_service.create_new_police_actions(
+            #             police_interaction=data,
+            #             new_police_info_id=user_police_info
+            #         )
+            # else:
+            #     # handle if police interactions is empty
+            #     user_police_actions = report_service.create_new_police_actions(
+            #             police_interaction='--',
+            #             new_police_info_id=user_police_info
+            #         )
             
             # add to OfficerInformation
             if form_data['police_officers'] != None:

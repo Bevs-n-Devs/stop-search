@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, Float, JSON
 from sqlalchemy.orm import relationship
 from stopSearch.stopSearch_database.extension import Base
 
@@ -93,10 +93,10 @@ class ReportedBy(Base):
 class VictimInformation(Base):
     __tablename__ = 'victim_information'
     victim_information_id = Column(Integer, primary_key=True, autoincrement=True)
-    number_of_victims = Column(String(8), nullable=False)
-    victim_age = Column(String(8), nullable=False)
+    number_of_victims = Column(String(25), nullable=False)
+    victim_age = Column(String(25), nullable=False)
     victim_gender = Column(String(25), nullable=False)
-    victim_race = Column(String(10), nullable=False)
+    victim_race = Column(String(60), nullable=False)
     report_data_id = Column(Integer, ForeignKey('report_data.report_data_id'))
 
 class PublicRelations(Base):
@@ -104,7 +104,7 @@ class PublicRelations(Base):
     public_relations_id = Column(Integer, primary_key=True, autoincrement=True)
     search_reason = Column(String(55), nullable=False)
     search_type = Column(String(10), nullable=False)
-    search_outcome = Column(String(30), nullable=False) # Unknown, No Further Action (NFA), Item Seized, Arrest, Warning or Caution Issued, Fixed Penalty Notice, Summons to Court, Community Resolution, Referral to Other Agencies
+    search_outcome = Column(String(30), nullable=False) # NEW Unknown, No Further Action (NFA), Item Seized, Arrest, Warning or Caution Issued, Fixed Penalty Notice, Summons to Court, Community Resolution, Referral to Other Agencies
     additional_notes = Column(Text, nullable=True)
     media = relationship('ReportMedia', backref='report_media_')
     address = relationship('IncidentAddress', backref='incident_address_')
@@ -113,9 +113,10 @@ class PublicRelations(Base):
 class PoliceInformation(Base):
     __tablename__ = 'police_information'
     police_information_id = Column(Integer, primary_key=True, autoincrement=True)
-    number_of_police = Column(String(8), nullable=False)
+    number_of_police = Column(String(25), nullable=False)
     obtain_police_info = Column(String(3), nullable=False)
-    body_camera = Column(String(10), nullable=False) # Unknown / yes / no
+    body_camera = Column(String(10), nullable=False) # NEW Unknown / yes / no
+    # actions = relationship('PoliceActions', backref='police_actions_')
     officers = relationship('OfficerInformation', backref='officer_information_')
     report_data_id = Column(Integer, ForeignKey('report_data.report_data_id'))
 
@@ -129,11 +130,12 @@ class ReportDate(Base):
     __tablename__ = 'report_date'
     report_date_id = Column(Integer, primary_key=True, autoincrement=True)
     report_date = Column(String(30), nullable=False)
-    formatted_day = Column(String(4), nullable=False)
-    formatted_week = Column(String(10), nullable=False)
-    formatted_month = Column(String(10), nullable=False)
-    formatted_year = Column(String(4), nullable=False)
-    formatted_time = Column(String(10), nullable=False)
+    formatted_day = Column(String(30), nullable=False)
+    formatted_week = Column(String(30), nullable=False)
+    formatted_month = Column(String(30), nullable=False)
+    formatted_year = Column(String(30), nullable=False)
+    formatted_time = Column(String(30), nullable=False)
+    time_stamp = Column(String(30), nullable=False)
     reported_by_id = Column(Integer, ForeignKey('reported_by.reported_by_id'))
 
 class IncidentAddress(Base):
@@ -145,15 +147,25 @@ class IncidentAddress(Base):
     country = Column(String(50), default='UK')
     coordinates = relationship('MapCoordinates', backref='map_coordinates_')
     public_relations_id = Column(Integer, ForeignKey('public_relations.public_relations_id'))
+ 
 
+# class PoliceActions(Base):
+#     __tablename__ = 'police_actions'
+#     police_action_id = Column(Integer, primary_key=True, autoincrement=True)
+#     police_interaction = Column(String(100), nullable=False)  # can be adujsted later
+#     police_information_id = Column(Integer, ForeignKey('police_information.police_information_id'))
+    
+    
+    
 class OfficerInformation(Base):
     __tablename__ = 'officer_information'
     officer_information_id = Column(Integer, primary_key=True, autoincrement=True)
-    badge_number = Column(String(10), nullable=True)
-    officer_name = Column(String(50), nullable=True)
-    police_station = Column(String(50), nullable=True)
-    officer_interaction = Column(String(50), nullable=False)
+    # TODO: Create a limit for the characters and apply logic in the submit_report report to validate length of characters
+    badge_number = Column(Text, nullable=True)
+    officer_name = Column(Text, nullable=True)
+    police_station = Column(Text, nullable=True)
     police_information_id = Column(Integer, ForeignKey('police_information.police_information_id'))
+    
 
 class MapCoordinates(Base):
     __tablename__ = 'map_coordinates'
